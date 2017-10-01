@@ -1,0 +1,5 @@
+http://www.chartjs.org/docs/latest/
+http://sigmajs.org/
+http://nvd3.org/examples/cumulativeLine.html
+http://nvd3.org/examples/line.html
+https://google-developers.appspot.com/chart/interactive/docs/gallery/linechart
