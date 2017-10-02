@@ -5,7 +5,7 @@ window.chartColors = {
 	orange: 'rgb(255, 159, 64)',
 	yellow: 'rgb(255, 205, 86)',
 	green: 'rgb(9, 163, 87)',
-	blue: 'rgb(54, 162, 235)',
+	blue: 'rgb(0, 178, 195)',
 	purple: 'rgb(153, 102, 255)',
 	grey: 'rgb(201, 203, 207)'
 };

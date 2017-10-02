@@ -12,6 +12,12 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
+var comments = require('./lib/comments')
+
+function start() {
+  
+}
+
 // create a new express server
 var app = express();
 
@@ -34,8 +40,53 @@ app.listen('8080', '0.0.0.0', function() {
 });
 
 app.get('/', function (req, res) {
-  return res.render('dashboard.ejs', { message: 'Hello, world' });
+  return res.redirect('/descubre')
 });
+
+app.get('/descubre', function (req, res) {
+  return res.render('descubre.ejs', { message: 'Hello, world' });
+});
+
+app.get('/lideres', function (req, res) {
+  
+  comments.getResultsForType('lider', function (lideres) {
+    if (!lideres) {
+      return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
+    }
+    
+    comments.getCommentSummaryByMonthForEntity(lideres[0]._id, function (summary) {
+      // TODO: check if summary not null
+      if (!summary) {
+        return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
+      }
+
+      console.log("Month labels", summary.monthLabels);
+      return res.render('lideres.ejs', {
+        lideres: lideres,
+        summary: summary
+      });
+    });
+
+  });
+
+})
+
+app.get('/summary/comments/:entity', function (req, res) {
+  var entity = req.params.entity;
+  comments.getCommentSummaryByMonthForEntity(entity, function (summary) {
+      // TODO: check if summary not null
+      if (!summary) {
+        return res.json({"error": "No summary found."});
+      }
+
+      console.log("Month labels", summary.monthLabels);
+      return res.json(summary);
+    });
+})
+
+app.get('/instituciones', function (req, res) {
+  return res.render('instituciones.ejs');
+})
 
 
 /*

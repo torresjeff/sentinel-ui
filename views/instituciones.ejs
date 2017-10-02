@@ -42,13 +42,13 @@
                             <p>Descubre</p>
                         </a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="/lideres">
                             <i class="material-icons">group</i>
                             <p>Líderes</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="/instituciones">
                             <i class="material-icons">business</i>
                             <p>Instituciones</p>
@@ -96,7 +96,6 @@
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                        <!--
                             <li>
                                 <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">dashboard</i>
@@ -133,7 +132,6 @@
                                     <p class="hidden-lg hidden-md">Profile</p>
                                 </a>
                             </li>
-                        -->
                         </ul>
                     </div>
                 </div>
@@ -144,17 +142,13 @@
                         <div class="col-md-3 dropdown">
                             <a id="dropdown-title" href="#" class="btn-simple dropdown-toggle" data-toggle="dropdown">
                                 <!-- TODO: reemplazar por el primero en orden alfabetico (con ejs) -->
-                                <% if (lideres.length > 0) { %>
-                                <%= lideres[0].friendly_name %>
-                                <% } %>
+                                Claudia López
                                 <b class="caret"></b>
                             </a>
                             <ul id="lideres" class="dropdown-menu">
-                                <% if (lideres.length > 0) { %>
-                                <% lideres.forEach(function (lider) { %>
-                                    <li><a id="<%= lider._id %>" href="#"><%= lider.friendly_name %></a></li>
-                                <% }) %>
-                                <% } %>
+                                <li><a href="#">Claudia López</a></li>
+                                <li><a href="#">Daniel Samper</a></li>
+                                <li><a href="#">Matador</a></li>
                                 <!--
                                 <li class="divider"></li>
                                 <li><a href="#">Separated link</a></li>
@@ -615,18 +609,7 @@
 <script src="/js/demo.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        var monthlyLabels = [
-            <% for (var i = 0; i < summary.monthLabels.length; i++) {
-                if (i != summary.monthLabels.length -1) { %>
-                    "<%= summary.monthLabels[i] %>",
-                <% }
-                   else { %>
-                    "<%= summary.monthLabels[i] %>"
-                <% }
-                }
-            %>
-            
-        ];
+
         // Javascript method's body can be found in assets/js/demos.js
         demo.initDashboardPageCharts();
 
@@ -634,30 +617,20 @@
             type: 'line',
             data: {
                 // TODO: poner años programatically
-                /*labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],*/
-                labels: monthlyLabels,
+                labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],
                 datasets: [{
                     label: "Sentimientos negativos",
                     lineTension: 0,
                     backgroundColor: window.chartColors.red,
                     borderColor: window.chartColors.red,
                     data: [
-                        <% for (var i = 0; i < summary.monthLabels.length; i++) {
-                            if (i != summary.monthLabels.length -1) { %>
-                                "<%= summary.monthSummaries[i].negative %>",
-                            <% }
-                               else { %>
-                                "<%= summary.monthSummaries[i].negative %>"
-                            <% }
-                            }
-                        %>
-                        /*randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
-                        randomScalingFactor()*/
+                        randomScalingFactor(),
+                        randomScalingFactor()
                     ],
                     fill: false,
                 }, {
@@ -667,47 +640,13 @@
                     backgroundColor: window.chartColors.green,
                     borderColor: window.chartColors.green,
                     data: [
-                        <% for (var i = 0; i < summary.monthLabels.length; i++) {
-                            if (i != summary.monthLabels.length -1) { %>
-                                "<%= summary.monthSummaries[i].positive %>",
-                            <% }
-                               else { %>
-                                "<%= summary.monthSummaries[i].positive %>"
-                            <% }
-                            }
-                        %>
-                        /*randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
                         randomScalingFactor(),
-                        randomScalingFactor()*/
-                    ],
-                }, {
-                    label: "Sentimientos neutros",
-                    hidden: true,
-                    lineTension: 0,
-                    fill: false,
-                    backgroundColor: window.chartColors.blue,
-                    borderColor: window.chartColors.blue,
-                    data: [
-                        <% for (var i = 0; i < summary.monthLabels.length; i++) {
-                            if (i != summary.monthLabels.length -1) { %>
-                                "<%= summary.monthSummaries[i].neutral %>",
-                            <% }
-                               else { %>
-                                "<%= summary.monthSummaries[i].neutral %>"
-                            <% }
-                            }
-                        %>
-                        /*randomScalingFactor(),
                         randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor()*/
+                        randomScalingFactor()
                     ],
                 }]
             },
@@ -749,39 +688,15 @@
         window.myLine = new Chart(ctx, config);
 
         $("#lideres > li > a").on('click', function (evt) {
-            var entity = $(this).attr('id');
-            
-            $.get("/summary/comments/" + entity, function (data) {
-                console.log(data.monthLabels);
-                // Negative
-                var negative = []
-                for (var i = 0; i < data.monthSummaries.length; i++) {
-                    negative.push(data.monthSummaries[i].negative);
-                }
-                config.data.datasets[0].data = negative;
-                // Positive
-                var positive = []
-                for (var i = 0; i < data.monthSummaries.length; i++) {
-                    positive.push(data.monthSummaries[i].positive);
-                }
-                config.data.datasets[1].data = positive;
-                // Neutral
-                var neutral = []
-                for (var i = 0; i < data.monthSummaries.length; i++) {
-                    neutral.push(data.monthSummaries[i].neutral);
-                }
-                config.data.datasets[2].data = neutral;
-
-                /*config.data.datasets.forEach(function(dataset) {
-                    dataset.data = dataset.data.map(function() {
-                        return randomScalingFactor();
-                    });
-                });*/
-
-                window.myLine.update();
-            });
             // Dummy code
+            config.data.datasets.forEach(function(dataset) {
+                dataset.data = dataset.data.map(function() {
+                    return randomScalingFactor();
+                });
 
+            });
+
+            window.myLine.update();
 
             // TODO: traer los datos de la persona que fue clicked
 
@@ -792,5 +707,5 @@
 
     });
 </script>
-<script src="/js/lideres.js"></script>
+
 </html>
