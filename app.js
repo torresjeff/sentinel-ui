@@ -48,7 +48,6 @@ app.get('/descubre', function (req, res) {
 });
 
 app.get('/lideres', function (req, res) {
-  
   comments.getResultsForType('lider', function (lideres) {
     if (!lideres) {
       return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
@@ -69,7 +68,23 @@ app.get('/lideres', function (req, res) {
 
   });
 
-})
+});
+
+app.get('/instituciones', function (req, res) {
+  return res.render('instituciones.ejs');
+});
+
+app.get('/casos', function (req, res) {
+  return res.render('casos.ejs', { message: 'Hello, world' });
+});
+
+app.get('/medios', function (req, res) {
+  return res.render('medios.ejs', { message: 'Hello, world' });
+});
+
+//////////////////////////////////////////////////////
+//                      WS                          //
+//////////////////////////////////////////////////////
 
 app.get('/summary/comments/:entity', function (req, res) {
   var entity = req.params.entity;
@@ -82,11 +97,8 @@ app.get('/summary/comments/:entity', function (req, res) {
       console.log("Month labels", summary.monthLabels);
       return res.json(summary);
     });
-})
+});
 
-app.get('/instituciones', function (req, res) {
-  return res.render('instituciones.ejs');
-})
 
 
 /*
