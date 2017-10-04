@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "id": "n0",
+      "label": "Corrupción",
+      "x": 0,
+      "y": 0,
+      "size": 6
+    },
+    {
+      "id": "n1",
+      "label": "Fiscal",
+      "x": 3,
+      "y": 1,
+      "size": 4
+    },
+    {
+      "id": "n2",
+      "label": "Soborno",
+      "x": 1,
+      "y": 3,
+      "size": 2
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "n0",
+      "target": "n1"
+    },
+    {
+      "id": "e1",
+      "source": "n1",
+      "target": "n2"
+    },
+    {
+      "id": "e2",
+      "source": "n2",
+      "target": "n0"
+    }
+  ]
+}
