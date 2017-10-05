@@ -22,7 +22,7 @@
     <style type="text/css">
       #graph {
         max-width: 1920px;
-        height: 400px;
+        height: 700px;
         margin: auto;
       }
     </style>
@@ -143,13 +143,13 @@
                         <div class="col-md-3 dropdown">
                             <a id="dropdown-title" href="#" class="btn-simple dropdown-toggle" data-toggle="dropdown">
                                 <!-- TODO: reemplazar por el primero en orden alfabetico (con ejs) -->
-                                Claudia López
+                                Corrupción
                                 <b class="caret"></b>
                             </a>
                             <ul id="lideres" class="dropdown-menu">
-                                <li><a href="#">Claudia López</a></li>
-                                <li><a href="#">Daniel Samper</a></li>
-                                <li><a href="#">Matador</a></li>
+                                <li><a id="noticias" href="#">Noticias de corrupción</a></li>
+                                <li><a id="comentarios" href="#">Comentarios sobre corrupción</a></li>
+                                <li><a id="casos-corrupcion" href="#">Casos de corrupción</a></li>
                                 <!--
                                 <li class="divider"></li>
                                 <li><a href="#">Separated link</a></li>
@@ -598,6 +598,7 @@
 <script src="/js/utils.js"></script>
 <script src="/js/sigma.min.js"></script>
 <script src="/js/sigma.parsers.json.min.js"></script>
+<script src="/js/sigma.layout.forceAtlas2.min.js"></script>
 <!--  Dynamic Elements plugin -->
 <script src="/js/arrive.min.js"></script>
 <!--  PerfectScrollbar Library -->
@@ -612,13 +613,16 @@
 <script src="/js/demo.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+
         sigma.parsers.json('/js/data.json', {
             container: 'graph',
             settings: {
               defaultNodeColor: '#ec5148',
-              labelThreshold: 0
+              labelThreshold: 0,
+              maxNodeSize: 20
             }
         });
+
         /*var ctx = document.getElementById("myChart").getContext("2d");
         window.myLine = new Chart(ctx, config);
 
