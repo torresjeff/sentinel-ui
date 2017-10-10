@@ -3,134 +3,96 @@
     {
       "id": "n0",
       "label": "Corrupción",
-      "x": 0,
-      "y": 0,
       "size": 18
     },
     {
       "id": "n1",
       "label": "Soborno",
-      "x": 1,
-      "y": 0,
       "size": 12
     },
     {
       "id": "n2",
       "label": "Extorsión",
-      "x": 1,
-      "y": 1,
       "size": 6
     },
     {
       "id": "n3",
       "label": "Robo",
-      "x": 2,
-      "y": 2,
       "size": 15
     },
     {
       "id": "n4",
       "label": "Hurto",
-      "x": 3,
-      "y": 2,
       "size": 20
     },
     {
       "id": "n5",
       "label": "Cohecho",
-      "x": 4,
-      "y": 3,
       "size": 8
     },
     {
       "id": "n6",
       "label": "Ilegalidad",
-      "x": 5,
-      "y": 3,
       "size": 10
     },
     {
       "id": "n7",
       "label": "Enriquecimiento Ilícito",
-      "x": 6,
-      "y": 4,
       "size": 1
     },
     {
       "id": "n8",
       "label": "Fraude",
-      "x": 7,
-      "y": 4,
       "size": 12
     },
     {
       "id": "n9",
       "label": "Falsedad",
-      "x": 8,
-      "y": 5,
       "size": 20
     },
     {
       "id": "n10",
       "label": "Ladrón",
-      "x": 9,
-      "y": 5,
       "size": 8
     },
     {
       "id": "n11",
       "label": "Torcidos",
-      "x": 10,
-      "y": 6,
       "size": 15
     },
     {
       "id": "n12",
       "label": "Serrucho",
-      "x": 11,
-      "y": 6,
       "size": 18
     },
     {
       "id": "n13",
       "label": "Robo",
-      "x": 12,
-      "y": 7,
       "size": 10
     },
     {
       "id": "n14",
       "label": "Sacar Tajada",
-      "x": 13,
-      "y": 7,
       "size": 14
     },
     {
       "id": "n15",
       "label": "Robo",
-      "x": 14,
-      "y": 8,
       "size": 20
     },
     {
       "id": "n16",
       "label": "Ilícito",
-      "x": 15,
-      "y": 8,
       "size": 8
     },
     {
       "id": "n17",
       "label": "Desfalco",
-      "x": 16,
-      "y": 9,
       "size": 11
     },
     {
       "id": "n18",
       "label": "Mermelada",
-      "x": 17,
-      "y": 9,
       "size": 20
     }
   ],

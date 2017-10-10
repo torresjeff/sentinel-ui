@@ -1,0 +1,168 @@
+{
+  "nodes": [
+    {
+      "id": "n0",
+      "label": "Corrupción",
+      "x": 0,
+      "y": 0,
+      "size": 18
+    },
+    {
+      "id": "n1",
+      "label": "Soborno",
+      "x": 0,
+      "y": 0,
+      "size": 12
+    },
+    {
+      "id": "n2",
+      "label": "Extorsión",
+      "x": 0,
+      "y": 0,
+      "size": 6
+    },
+    {
+      "id": "n3",
+      "label": "Robo",
+      "x": 0,
+      "y": 0,
+      "size": 15
+    },
+    {
+      "id": "n4",
+      "label": "Hurto",
+      "x": 0,
+      "y": 0,
+      "size": 20
+    },
+    {
+      "id": "n5",
+      "label": "Cohecho",
+      "x": 0,
+      "y": 0,
+      "size": 8
+    },
+    {
+      "id": "n6",
+      "label": "Ilegalidad",
+      "x": 0,
+      "y": 0,
+      "size": 10
+    },
+    {
+      "id": "n7",
+      "label": "Enriquecimiento Ilícito",
+      "x": 0,
+      "y": 0,
+      "size": 1
+    },
+    {
+      "id": "n8",
+      "label": "Fraude",
+      "x": 0,
+      "y": 0,
+      "size": 12
+    },
+    {
+      "id": "n9",
+      "label": "Falsedad",
+      "x": 0,
+      "y": 0,
+      "size": 20
+    },
+    {
+      "id": "n10",
+      "label": "Ladrón",
+      "x": 0,
+      "y": 0,
+      "size": 8
+    },
+    {
+      "id": "n11",
+      "label": "Torcidos",
+      "x": 0,
+      "y": 0,
+      "size": 15
+    },
+    {
+      "id": "n12",
+      "label": "Serrucho",
+      "x": 0,
+      "y": 0,
+      "size": 18
+    },
+    {
+      "id": "n13",
+      "label": "Robo",
+      "x": 0,
+      "y": 0,
+      "size": 10
+    },
+    {
+      "id": "n14",
+      "label": "Sacar Tajada",
+      "x": 0,
+      "y": 0,
+      "size": 14
+    },
+    {
+      "id": "n15",
+      "label": "Robo",
+      "x": 0,
+      "y": 0,
+      "size": 20
+    },
+    {
+      "id": "n16",
+      "label": "Ilícito",
+      "x": 0,
+      "y": 0,
+      "size": 8
+    },
+    {
+      "id": "n17",
+      "label": "Desfalco",
+      "x": 0,
+      "y": 0,
+      "size": 11
+    },
+    {
+      "id": "n18",
+      "label": "Mermelada",
+      "x": 0,
+      "y": 0,
+      "size": 20
+    },
+    {
+      "id": "n19",
+      "label": "Uribe",
+      "x": 0,
+      "y": 0,
+      "size": 12
+    },
+    {
+      "id": "n20",
+      "label": "Santos",
+      "x": 0,
+      "y": 0,
+      "size": 10
+    }
+  ],
+  "edges": [
+    {
+      "id": "corrupcion_uribe",
+      "source": "n0",
+      "target": "n19"
+    },
+    {
+      "id": "corrupcion_santos",
+      "source": "n0",
+      "target": "n20"
+    },
+    {
+      "id": "mermelada_santos",
+      "source": "n18",
+      "target": "n20"
+    }
+  ]
+}
