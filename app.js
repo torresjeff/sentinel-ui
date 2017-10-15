@@ -13,6 +13,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 var comments = require('./lib/comments')
+var assocs = require('./lib/assocs')
 
 function start() {
   
@@ -53,18 +54,30 @@ app.get('/lideres', function (req, res) {
       return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
     }
     
-    comments.getCommentSummaryByMonthForEntity(lideres[0]._id, function (summary) {
-      // TODO: check if summary not null
-      if (!summary) {
-        return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
-      }
+    if (lideres.length > 0) {
+      comments.getCommentSummaryByMonthForEntity(lideres[0]._id, function (summary) {
+        // TODO: check if summary not null
+        if (!summary) {
+          return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
+        }
 
-      console.log("Month labels", summary.monthLabels);
-      return res.render('lideres.ejs', {
-        lideres: lideres,
-        summary: summary
+        console.log("Month labels", summary.monthLabels);
+        return res.render('lideres.ejs', {
+          lideres: lideres,
+          summary: summary
+        });
       });
-    });
+    }
+    else {
+      return res.render('lideres.ejs', {
+        error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.",
+        lideres: [],
+        summary: {
+          monthLabels: [],
+          monthSummaries: []
+        }
+      });
+    }
 
   });
 
@@ -97,6 +110,13 @@ app.get('/summary/comments/:entity', function (req, res) {
       console.log("Month labels", summary.monthLabels);
       return res.json(summary);
     });
+});
+
+app.get('/summary/assocs/:year/:month/:type', function (req, res) {
+  assocs.getAssocsFor(parseInt(req.params.month), parseInt(req.params.year), req.params.type, function (results) {
+    return res.json(results);
+  });
+
 });
 
 

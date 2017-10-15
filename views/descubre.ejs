@@ -21,9 +21,13 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
     <style type="text/css">
       #graph {
-        max-width: 1920px;
+        width: 100%;
         height: 700px;
-        margin: auto;
+        margin: 0px;
+      }
+      .nopadding {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
       }
     </style>
 </head>
@@ -97,6 +101,7 @@
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
+                        <!--
                             <li>
                                 <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">dashboard</i>
@@ -133,6 +138,7 @@
                                     <p class="hidden-lg hidden-md">Profile</p>
                                 </a>
                             </li>
+                        -->
                         </ul>
                     </div>
                 </div>
@@ -143,13 +149,12 @@
                         <div class="col-md-3 dropdown">
                             <a id="dropdown-title" href="#" class="btn dropdown-toggle" data-toggle="dropdown">
                                 <!-- TODO: reemplazar por el primero en orden alfabetico (con ejs) -->
-                                Corrupción
+                                Publicaciones
                                 <b class="caret"></b>
                             </a>
-                            <ul id="lideres" class="dropdown-menu">
-                                <li><a id="noticias" href="#">Noticias de corrupción</a></li>
-                                <li><a id="comentarios" href="#">Comentarios sobre corrupción</a></li>
-                                <li><a id="casos-corrupcion" href="#">Casos de corrupción</a></li>
+                            <ul id="dropdown" class="dropdown-menu">
+                                <li><a id="posts" href="#">Publicaciones</a></li>
+                                <li><a id="comments" href="#">Comentarios</a></li>
                                 <!--
                                 <li class="divider"></li>
                                 <li><a href="#">Separated link</a></li>
@@ -159,7 +164,33 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="row">
+                    <div id="graph-container" class="row nopadding">
+                        <!--
+                        <div class="checkbox">
+                            <label style="color: #ff6600">
+                                <input id="casos" type="checkbox" checked>
+                                Casos de corrupción
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label style="color: #ec5148">
+                                <input id="palabras" type="checkbox" checked>
+                                Palabras asociadas a corrupción
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label style="color: #009933">
+                                <input id="lideres" type="checkbox" checked>
+                                Líderes de opinión
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label style="color: #666699">
+                                <input id="partidos" type="checkbox" checked>
+                                Partidos políticos
+                            </label>
+                        </div>
+                        -->
                         <!-- Line chart -->
                         <div id="graph">
                         </div>
@@ -230,37 +261,86 @@
 <script src="/js/demo.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        //demo.initDashboardPageCharts();
+        var s = null;
+        var sigmaSettings = {
+          defaultNodeColor: '#0033cc',
+          labelThreshold: 0,
+          maxNodeSize: 20,
+          autoRescale: false,
+          //rescaleIgnoreSize: true,
+          minEdgeSize: 20,
+          maxEdgeSize: 20
+          //nodesPowRatio: 2,
+          /*zoomingRatio: 1,
+          doubleClickEnabled: false,
+          mouseWheelEnabled: false,
+          zoomMin: 0.0625,
+          zoomMax: 0.0625*/
+        };
 
-        sigma.parsers.json('/js/data.all.0.json', {
-            container: 'graph',
-            settings: {
-              defaultNodeColor: '#ec5148',
-              labelThreshold: 0,
-              maxNodeSize: 20
-            }
-        }, function (s) { // This function is passed an instance of sigma
-                console.log("Callback called")
-                var config = {
-                  nodeMargin: 3.0,
-                  scaleNodes: 1.3
-                };
+        var today = new Date();
+        //console.log("month", );
+        //console.log("year", );
+        function getAssocs(type, year, month) {
+            $.get("/summary/assocs/" + year + "/" + month + "/" + type, function (data) {
+                console.log(data);
+                if (s) {
 
-                // Configure the algorithm
-                var listener = s.configNoverlap(config);
-
-                // Bind all events:
-                listener.bind('start stop interpolate', function(event) {
+                    /*//s.graph.clear();
+                    //this gets rid of any methods you've attached to s.
+                    if (s.isForceAtlas2Running()) {
+                        s.stopForceAtlas2();
+                    }
+                    if (s.isNoverlapRunning()) {
+                        s.stopNoverlap();
+                    }
+                    sigma.plugins.killDragNodes(sigInst);
+                    //s.refresh();*/
+                    //s.graph.kill();
+                    s = null;
+                    $("#graph").empty();
+                    $("#graph-container").html('<div id="graph"></div>');
+                }
+                
+                s = new sigma({
+                    graph: data,
+                    container: 'graph',
+                    settings: sigmaSettings
                 });
 
+
+                // Drag nodes
                 var dragListener = new sigma.plugins.dragNodes(s, s.renderers[0]);
 
+                //s.stopForceAtlas2();
+                // TODO: get back to this (layout, no overlapping)
+                // Noverlap //
+                var config = {
+                  nodeMargin: 1.0,
+                  //scaleNodes: 10.0,
+                  gridSize: 20
+                  //speed: 5
+                  //permittedExpansion: 3
+                };
 
-                // Start the algorithm:
+                // Configure Noverlap
+                var listener = s.configNoverlap(config);
+                listener.bind('stop', function(event) {
+                    console.log("called")
+                });
                 s.startNoverlap();
+
+                // Start ForceAtlas2
                 s.startForceAtlas2({
-                    //barnesHutOptimize: false
-                    //scalingRatio: 50
-                    //linLogMode: true
+                    //barnesHutOptimize: false,
+                    //scalingRatio: 1.5,
+                    //linLogMode: true,
+                    //startingIterations: 500,
+                    //edgeWeightInfluence: 1,
+                    //strongGravityMode: true,
+                    slowDown: 5,
+                    adjustSizes: false
                 });
                 setTimeout(function () {
                     if (s.isForceAtlas2Running()) {
@@ -268,47 +348,89 @@
                     }
                 }, 3000);
 
+                // Bind all events:
+                
+                /*sigma.parsers.json('/js/data.all.0.json', {
+                    container: 'graph',
+                    settings: {
+                      defaultNodeColor: '#ec5148',
+                      labelThreshold: 0,
+                      maxNodeSize: 20
+                    }
+                }, function (s) { // This function is passed an instance of sigma
+                        console.log("Callback called")
+                        var config = {
+                          nodeMargin: 3.0,
+                          scaleNodes: 1.3
+                        };
+
+                        // Configure the algorithm
+                        var listener = s.configNoverlap(config);
+
+                        // Bind all events:
+                        listener.bind('start stop interpolate', function(event) {
+                        });
+
+                        var dragListener = new sigma.plugins.dragNodes(s, s.renderers[0]);
+
+
+                        // Start the algorithm:
+                        s.startNoverlap();
+                        s.startForceAtlas2({
+                            //barnesHutOptimize: false
+                            //scalingRatio: 50
+                            //linLogMode: true
+                        });
+                        setTimeout(function () {
+                            if (s.isForceAtlas2Running()) {
+                                s.stopForceAtlas2();
+                            }
+                        }, 3000);
+
+                    });*/
             });
+        }
 
+        function hexc(colorval) {
+            var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            delete(parts[0]);
+            for (var i = 1; i <= 3; ++i) {
+                parts[i] = parseInt(parts[i]).toString(16);
+                if (parts[i].length == 1) parts[i] = '0' + parts[i];
+            }
+            color = '#' + parts.join('');
+            return color;
+        }
 
-        /*var config = {
-            nodeMargin: 3.0,
-            scaleNodes: 1.3
-        };
-
-        // Configure the algorithm
-        var listener = s.configNoverlap(config);
-
-        // Bind all events:
-        listener.bind('start stop interpolate', function(event) {
-          console.log(event.type);
+        getAssocs("posts", today.getFullYear(), (today.getMonth() + 1));
+        
+        $("#dropdown > li > a").on('click', function (evt) {
+            var selection = $(this).text();
+            $("#dropdown-title").text(selection + " ");
+            $("#dropdown-title").append('<b class="caret"></b>');
+            var type = $(this).attr("id");
+            getAssocs(type, today.getFullYear(), (today.getMonth() + 1))
         });
 
-        // Start the algorithm:
-        s.startNoverlap();*/
-
-        /*var ctx = document.getElementById("myChart").getContext("2d");
-        window.myLine = new Chart(ctx, config);
-
-        $("#lideres > li > a").on('click', function (evt) {
-            // Dummy code
-            config.data.datasets.forEach(function(dataset) {
-                dataset.data = dataset.data.map(function() {
-                    return randomScalingFactor();
-                });
-
+        /*
+        $("input[type=checkbox]").on('click', function (evt) {
+            console.log("checkbox clicked", $(this).attr("id"), $(this).is(':checked'));
+            var checked = $(this).is(':checked');
+            var color = $(this).parent().css("color");
+            //console.log(color);
+            //console.log(hexc(color));
+            s.graph.nodes().forEach(function(node) {
+                node.hidden = node.color == hexc(color) && !checked;
             });
 
-            window.myLine.update();
+            // Refresh the renderers to make the changes effective:
+            s.refresh();
 
-            // TODO: traer los datos de la persona que fue clicked
-
-            var lider = $(this).text();
-            $("#dropdown-title").text(lider + " ");
-            $("#dropdown-title").append('<b class="caret"></b>');
         });*/
 
-    });
+    }); //document.ready
+        
+
 </script>
 <script type="text/javascript">
     

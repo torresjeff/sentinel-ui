@@ -2,7 +2,7 @@
   "nodes": [
     {
       "id": "n0",
-      "label": "Corrupción",
+      "label": "Corruptos",
       "x": 0,
       "y": 0,
       "size": 18
@@ -72,7 +72,7 @@
     },
     {
       "id": "n10",
-      "label": "Ladrón",
+      "label": "Ladrones",
       "x": 0,
       "y": 0,
       "size": 8
@@ -93,76 +93,33 @@
     },
     {
       "id": "n13",
-      "label": "Robo",
-      "x": 0,
-      "y": 0,
-      "size": 10
-    },
-    {
-      "id": "n14",
       "label": "Sacar Tajada",
       "x": 0,
       "y": 0,
       "size": 14
     },
     {
-      "id": "n15",
-      "label": "Robo",
-      "x": 0,
-      "y": 0,
-      "size": 20
-    },
-    {
-      "id": "n16",
+      "id": "n14",
       "label": "Ilícito",
       "x": 0,
       "y": 0,
       "size": 8
     },
     {
-      "id": "n17",
+      "id": "n15",
       "label": "Desfalco",
       "x": 0,
       "y": 0,
       "size": 11
     },
     {
-      "id": "n18",
+      "id": "n16",
       "label": "Mermelada",
       "x": 0,
       "y": 0,
       "size": 20
-    },
-    {
-      "id": "n19",
-      "label": "Uribe",
-      "x": 0,
-      "y": 0,
-      "size": 12
-    },
-    {
-      "id": "n20",
-      "label": "Santos",
-      "x": 0,
-      "y": 0,
-      "size": 10
     }
   ],
   "edges": [
-    {
-      "id": "corrupcion_uribe",
-      "source": "n0",
-      "target": "n19"
-    },
-    {
-      "id": "corrupcion_santos",
-      "source": "n0",
-      "target": "n20"
-    },
-    {
-      "id": "mermelada_santos",
-      "source": "n18",
-      "target": "n20"
-    }
   ]
 }
