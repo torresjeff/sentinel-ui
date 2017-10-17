@@ -12,8 +12,9 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
-var comments = require('./lib/comments')
-var assocs = require('./lib/assocs')
+var comments = require('./lib/comments');
+var assocs = require('./lib/assocs');
+var descriptive = require('./lib/descriptive');
 
 function start() {
   
@@ -88,7 +89,22 @@ app.get('/instituciones', function (req, res) {
 });
 
 app.get('/casos', function (req, res) {
-  return res.render('casos.ejs', { message: 'Hello, world' });
+  descriptive.getAllActivityCounts('activity_count', 'casos', function (casos) {
+    if (!casos) {
+      return res.render('casos.ejs', { casos: [] });
+    }
+    if (casos.length > 0) {
+      return res.render('casos.ejs', {
+        casos: casos
+      })
+    }
+    else {
+      return res.render('casos.ejs', {
+        error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.",
+        casos: []
+      })
+    }
+  });
 });
 
 app.get('/medios', function (req, res) {
@@ -116,9 +132,13 @@ app.get('/summary/assocs/:year/:month/:type', function (req, res) {
   assocs.getAssocsFor(parseInt(req.params.month), parseInt(req.params.year), req.params.type, function (results) {
     return res.json(results);
   });
-
 });
 
+app.get('/summary/activity/:entity', function (req, res) {
+  descriptive.getAllActivityCounts("activity_count", req.params.entity, function (results) {
+    return res.json(results);
+  });
+});
 
 
 /*
