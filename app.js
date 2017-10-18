@@ -38,7 +38,7 @@ app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 
 app.listen('8080', '0.0.0.0', function() {
   // print a message when the server starts listening
-  console.log("server started");
+  console.log("server started on port 8080");
 });
 
 app.get('/', function (req, res) {
@@ -108,7 +108,7 @@ app.get('/casos', function (req, res) {
 });
 
 app.get('/medios', function (req, res) {
-  return res.render('medios.ejs', { message: 'Hello, world' });
+  return res.render('medios.ejs', { medios: [] });
 });
 
 //////////////////////////////////////////////////////
