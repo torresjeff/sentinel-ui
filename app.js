@@ -11,14 +11,66 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var fs = require('fs');
+
+var csv = require('fast-csv');
 
 var comments = require('./lib/comments');
 var assocs = require('./lib/assocs');
 var descriptive = require('./lib/descriptive');
 
-function start() {
-  
+var knowledgeBasePath = "../analytics/base-conocimiento/";
+
+var facebookConfig = null;
+var paginasMedios = [];
+var casos = [];
+var lideres = [];
+var partidos = [];
+var instituciones = [];
+
+function readKnowledgeBase(file, callback) {
+  var words = {};
+  var wordsArr = []
+  csv.fromPath(knowledgeBasePath + file)
+    .on("data", function (data) {
+      if (!(data[2] in words)) {
+        words[data[2]] = {"synonyms": [], "friendly_name": ""};
+      }
+      words[data[2]]['synonyms'].push(data[0]);
+      words[data[2]]['friendly_name'] = data[3];
+    })
+    .on("end", function () {
+      for (var key in words) {
+        // check if the property/key is defined in the object itself, not in parent
+        if (words.hasOwnProperty(key)) {
+          wordsArr.push({"name": words[key]['friendly_name'], "id": key});
+        }
+      }
+      callback(wordsArr);
+    });
 }
+
+// Read all knowledge bases
+function start() {
+  facebookConfig = JSON.parse(fs.readFileSync('../facebook-scraper-py/config.medios.json', 'utf8'));
+  paginasMedios = facebookConfig['pages']
+
+  readKnowledgeBase("casos-corrupcion.txt", function (res) {
+    casos = res;
+  });
+  readKnowledgeBase("lideres-opinion.txt", function (res) {
+    lideres = res;
+  });
+  readKnowledgeBase("partidos-politicos.txt", function (res) {
+    partidos = res;
+  });
+  readKnowledgeBase("instituciones.txt", function (res) {
+    instituciones = res;
+  });
+}
+
+
+start();
 
 // create a new express server
 var app = express();
@@ -108,7 +160,14 @@ app.get('/casos', function (req, res) {
 });
 
 app.get('/medios', function (req, res) {
-  return res.render('medios.ejs', { medios: [] });
+  console.log("lideres", lideres)
+  return res.render('medios.ejs', {
+    medios: paginasMedios,
+    casos: casos,
+    lideres: lideres,
+    partidos: partidos,
+    instituciones: instituciones
+  });
 });
 
 //////////////////////////////////////////////////////

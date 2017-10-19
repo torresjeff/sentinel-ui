@@ -135,36 +135,214 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-3 dropdown">
-                            <a id="dropdown-title" href="#" class="btn-simple dropdown-toggle" data-toggle="dropdown">
-                                <!-- TODO: reemplazar por el primero en orden alfabetico (con ejs) -->
+                        <div class="col-md-6 dropdown">
+                            <a id="dropdown-title" href="#" class="btn dropdown-toggle" data-toggle="dropdown">
                                 <% if (medios.length > 0) { %>
-                                <%= medios[0].friendly_name %>
+                                <%= medios[0].name %>
                                 <% } %>
                                 <b class="caret"></b>
                             </a>
-                            <ul id="medios" class="dropdown-menu">
+                            <ul id="medios-1" class="dropdown-menu">
                                 <% if (medios.length > 0) { %>
                                 <% medios.forEach(function (medio) { %>
-                                    <li><a id="<%= medio._id %>" href="#"><%= medio.friendly_name %></a></li>
+                                    <li><a id="<%= medio.id %>" href="#"><%= medio.name %></a></li>
                                 <% }) %>
                                 <% } %>
-                                <!--
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
-                                -->
                             </ul>
                         </div>
-                        <!-- Line chart -->
-                        <div class="col-lg-12">
-                            <canvas id="myChart" width="100%" height="400"></canvas>
+                        <div class="col-md-6 dropdown">
+                            <!--<div class="pull-right">-->
+                                <a id="dropdown-title" href="#" class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <!-- TODO: reemplazar por el primero en orden alfabetico (con ejs) -->
+                                    <% if (medios.length > 1) { %>
+                                    <%= medios[1].name %>
+                                    <% } else if (medios.length > 0) { %>
+                                    <%= medios[0].name %>
+                                    <% } %>
+                                    <b class="caret"></b>
+                                </a>
+                                <ul id="medios-2" class="dropdown-menu">
+                                    <% if (medios.length > 0) { %>
+                                    <% medios.forEach(function (medio) { %>
+                                        <li><a id="<%= medio.id %>" href="#"><%= medio.name %></a></li>
+                                    <% }) %>
+                                    <% } %>
+                                </ul>
+                            <!--</div>-->
                         </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <!-- TODO: template titulos, etc. -->
+                        <h3>Publicaciones sobre corrupción</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
+                        <div class="col-lg-6">
+                            abc
+                            def
+                        </div>
+                        <div class="col-lg-6">
+                            ghi
+                            jkl
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-3 col-md-6 col-sm-6">
+                        <!-- TODO: template titulos, etc. -->
+                        <h3>Casos de corrupción</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <!-- if dropdown then:-->
+                                        <div class="col-md-6 dropdown">
+                                                <a id="dropdown-title" href="#" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                                                    <% if (casos.length > 0) { %>
+                                                    <%= casos[0].name %>
+                                                    <% } %>
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <ul id="casos" class="dropdown-menu">
+                                                    <% if (casos.length > 0) { %>
+                                                    <% casos.forEach(function (caso) { %>
+                                                        <li><a id="<%= caso.id %>" href="#"><%= caso.name %></a></li>
+                                                    <% }) %>
+                                                    <% } %>
+                                                </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col-lg-6">
+                                <h2 id="count-casos-1" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-casos-1"></p>
+                        </div>
+                        <div class="col-lg-6">
+                                <h2 id="count-casos-2" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-casos-2"><i>Este medio publica sobre este caso más de lo normal</i></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- TODO: template titulos, etc. -->
+                        <h3>Líderes de opinión</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <!-- if dropdown then:-->
+                                        <div class="col-md-6 dropdown">
+                                                <a id="dropdown-title" href="#" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                                    <% if (lideres.length > 0) { %>
+                                                    <%= lideres[0].name %>
+                                                    <% } %>
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <ul id="lideres" class="dropdown-menu">
+                                                    <% if (lideres.length > 0) { %>
+                                                    <% lideres.forEach(function (lider) { %>
+                                                        <li><a id="<%= lider.id %>" href="#"><%= lider.name %></a></li>
+                                                    <% }) %>
+                                                    <% } %>
+                                                </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col-lg-6">
+                                <h2 id="count-lideres-1" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-lideres-1"></p>
+                        </div>
+                        <div class="col-lg-6">
+                                <h2 id="count-lideres-2" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-lideres-2"><i>Este medio publica sobre este caso más de lo normal</i></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- TODO: template titulos, etc. -->
+                        <h3>Partidos políticos</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <!-- if dropdown then:-->
+                                        <div class="col-md-6 dropdown">
+                                                <a id="dropdown-title" href="#" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                    <% if (partidos.length > 0) { %>
+                                                    <%= partidos[0].name %>
+                                                    <% } %>
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <ul id="partidos" class="dropdown-menu">
+                                                    <% if (partidos.length > 0) { %>
+                                                    <% partidos.forEach(function (partido) { %>
+                                                        <li><a id="<%= partido.id %>" href="#"><%= partido.name %></a></li>
+                                                    <% }) %>
+                                                    <% } %>
+                                                </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col-lg-6">
+                                <h2 id="count-partidos-1" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-partidos-1"></p>
+                        </div>
+                        <div class="col-lg-6">
+                                <h2 id="count-partidos-2" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-partidos-2"><i>Este medio publica sobre este caso más de lo normal</i></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- TODO: template titulos, etc. -->
+                        <h3>Instituciones</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <!-- if dropdown then:-->
+                                        <div class="col-md-6 dropdown">
+                                                <a id="dropdown-title" href="#" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                                    <% if (instituciones.length > 0) { %>
+                                                    <%= instituciones[0].name %>
+                                                    <% } %>
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <ul id="instituciones" class="dropdown-menu">
+                                                    <% if (instituciones.length > 0) { %>
+                                                    <% instituciones.forEach(function (institucion) { %>
+                                                        <li><a id="<%= institucion.id %>" href="#"><%= institucion.name %></a></li>
+                                                    <% }) %>
+                                                    <% } %>
+                                                </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col-lg-6">
+                                <h2 id="count-instituciones-1" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-instituciones-1"></p>
+                        </div>
+                        <div class="col-lg-6">
+                                <h2 id="count-instituciones-2" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
+                                <p id="describe-count-instituciones-2"><i>Este medio publica sobre este caso más de lo normal</i></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="card card-stats">
                                 <div class="card-header" data-background-color="orange">
                                     <i class="material-icons">content_copy</i>
@@ -601,21 +779,53 @@
 <script src="/js/perfect-scrollbar.jquery.min.js"></script>
 <!--  Notifications Plugin    -->
 <script src="/js/bootstrap-notify.js"></script>
-<!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
 <!-- Material Dashboard javascript methods -->
 <script src="/js/material-dashboard.js?v=1.2.0"></script>
+<script src="/js/countUp.min.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="/js/demo.js"></script>
 <script type="text/javascript">
     $(document).ready(function() { 
         // Javascript method's body can be found in assets/js/demos.js
-        demo.initDashboardPageCharts();
 
         // TODO: poner años programatically
         /*labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],*/
 
-        var ctx = document.getElementById("myChart").getContext("2d");
+        var components = [
+            'count-casos-1',
+            'count-casos-2',
+            'count-lideres-1',
+            'count-lideres-2',
+            'count-partidos-1',
+            'count-partidos-2',
+            'count-instituciones-1',
+            'count-instituciones-2'
+        ];
+        var start = [0, 0, 0, 0, 0, 0, 0, 0];
+        var end = [1234, 4560, 1234, 4560, 1234, 4560, 1234, 4560];
+
+        function animateCount(id, start, end) {
+            var options = {
+              useEasing: true, 
+              useGrouping: true, 
+              separator: '.', 
+              decimal: ',', 
+            };
+
+            var counter = new CountUp(id, start, end, 0, 1, options);
+            if (!counter.error) {
+                counter.start();
+            } else {
+                console.error(counter.error);
+            }
+        }
+
+        for (var i = 0; i < components.length; i++) {
+            animateCount(components[i], start[i], end[i])
+        }
+
+
+
         //window.myLine = new Chart(ctx, config);
 
         $("#lideres > li > a").on('click', function (evt) {
@@ -642,12 +852,6 @@
                 }
                 config.data.datasets[2].data = neutral;
 
-                /*config.data.datasets.forEach(function(dataset) {
-                    dataset.data = dataset.data.map(function() {
-                        return randomScalingFactor();
-                    });
-                });*/
-
                 window.myLine.update();
             });
             // Dummy code
@@ -660,7 +864,13 @@
             $("#dropdown-title").append('<b class="caret"></b>');
         });
 
+        $(".dropdown-menu > li > a").on('click', function (evt) {
+            var medio = $(this).text();
+            var dropdown = $(this).parent().parent().prev();
+            dropdown.text(medio + " ");
+            dropdown.append('<b class="caret"></b>');
+        })
+
     });
 </script>
-<script src="/js/lideres.js"></script>
 </html>
