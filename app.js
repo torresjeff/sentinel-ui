@@ -102,38 +102,16 @@ app.get('/descubre', function (req, res) {
 });
 
 app.get('/lideres', function (req, res) {
-  comments.getResultsForType('lider', function (lideres) {
+  comments.getSentimentForLider(lideres[0].id, function (sentiments) {
+    console.log("lideres", lideres)
+    console.log(sentiments);
     if (!lideres) {
-      return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
-    }
-    
-    if (lideres.length > 0) {
-      comments.getCommentSummaryByMonthForEntity(lideres[0]._id, function (summary) {
-        // TODO: check if summary not null
-        if (!summary) {
-          return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: []});
-        }
-
-        console.log("Month labels", summary.monthLabels);
-        return res.render('lideres.ejs', {
-          lideres: lideres,
-          summary: summary
-        });
-      });
+      return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: [], summary: []});
     }
     else {
-      return res.render('lideres.ejs', {
-        error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.",
-        lideres: [],
-        summary: {
-          monthLabels: [],
-          monthSummaries: []
-        }
-      });
+      return res.render('lideres.ejs', {lideres: lideres, summary: sentiments});
     }
-
   });
-
 });
 
 app.get('/instituciones', function (req, res) {
@@ -176,13 +154,11 @@ app.get('/medios', function (req, res) {
 
 app.get('/summary/comments/:entity', function (req, res) {
   var entity = req.params.entity;
-  comments.getCommentSummaryByMonthForEntity(entity, function (summary) {
+  comments.getSentimentForLider(entity, function (summary) {
       // TODO: check if summary not null
       if (!summary) {
         return res.json({"error": "No summary found."});
       }
-
-      console.log("Month labels", summary.monthLabels);
       return res.json(summary);
     });
 });
