@@ -1,0 +1,196 @@
+<script>
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = today.getMonth() + 1;
+
+	var medioLeft = "<%= medios[0].id %>";
+	var medioRight = "<%= medios[1].id %>";
+	var currentCase = "odebrecht";
+	var currentLeader = "<%= lideres[0].id %>";
+	var currentPartido = "<%= partidos[0].id %>";
+	var currentInstitucion = "<%= instituciones[0].id %>";
+
+	console.log("medioLeft", medioLeft);
+	console.log("medioRight", medioRight);
+
+	var sesgoCasos = <%- JSON.stringify(sesgoCasos) %>;
+	var sesgoLideres = <%- JSON.stringify(sesgoLideres) %>;
+    var sesgoPartidos = <%- JSON.stringify(sesgoPartidos) %>;
+    var sesgoInstituciones = <%- JSON.stringify(sesgoInstituciones) %>;
+
+	var components = [
+        'count-casos-1',
+        'count-casos-2',
+        'count-lideres-1',
+        'count-lideres-2',
+        'count-partidos-1',
+        'count-partidos-2',
+        'count-instituciones-1',
+        'count-instituciones-2'
+    ];
+    var start = [0, 0, 0, 0, 0, 0, 0, 0];
+    var end = [1234, 4560, 1234, 4560, 1234, 4560, 1234, 4560];
+
+    function animateCount(idCounter, idMedio, aspect, idAspect) {
+        var options = {
+          useEasing: true, 
+          useGrouping: true, 
+          separator: '.', 
+          decimal: ',', 
+        };
+
+        var end = 0;
+        var outlier = "normal";
+
+        if (aspect == "casos") {
+	        end = sesgoCasos['medios'][idMedio][idAspect]["posts"];
+	        outlier = sesgoCasos['medios'][idMedio][idAspect]["outlier"];
+
+	        var counterDescriptionId = "#describe-" + idCounter;
+	        if (outlier == "normal") {
+	        	$(counterDescriptionId).html("<i></i>");
+	        }
+	        else if (outlier == "small") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre este caso menos de lo normal</i>");
+	        }
+	        else if (outlier == "large") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre este caso más de lo normal</i>");
+	        }
+        }
+        else if (aspect == "lideres") {
+        	end = sesgoLideres['medios'][idMedio][idAspect]["posts"];
+	        outlier = sesgoLideres['medios'][idMedio][idAspect]["outlier"];
+
+	        var counterDescriptionId = "#describe-" + idCounter;
+	        if (outlier == "normal") {
+	        	$(counterDescriptionId).html("<i></i>");
+	        }
+	        else if (outlier == "small") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre este lider de opinión menos de lo normal</i>");
+	        }
+	        else if (outlier == "large") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre este lider de opinión más de lo normal</i>");
+	        }
+        }
+        else if (aspect == "partidos") {
+        	end = sesgoPartidos['medios'][idMedio][idAspect]["posts"];
+	        outlier = sesgoPartidos['medios'][idMedio][idAspect]["outlier"];
+
+	        var counterDescriptionId = "#describe-" + idCounter;
+	        if (outlier == "normal") {
+	        	$(counterDescriptionId).html("<i></i>");
+	        }
+	        else if (outlier == "small") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre este partido político menos de lo normal</i>");
+	        }
+	        else if (outlier == "large") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre este partido político más de lo normal</i>");
+	        }
+        }
+        else if (aspect == "instituciones") {
+        	end = sesgoInstituciones['medios'][idMedio][idAspect]["posts"];
+	        outlier = sesgoInstituciones['medios'][idMedio][idAspect]["outlier"];
+
+	        var counterDescriptionId = "#describe-" + idCounter;
+	        if (outlier == "normal") {
+	        	$(counterDescriptionId).html("<i></i>");
+	        }
+	        else if (outlier == "small") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre esta institución menos de lo normal</i>");
+	        }
+	        else if (outlier == "large") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre esta institución más de lo normal</i>");
+	        }
+        }
+
+        var counter = new CountUp(idCounter, 0, end, 0, 1.5, options);
+        if (!counter.error) {
+            counter.start();
+        } else {
+            console.error(counter.error);
+        }
+    }
+
+    /*for (var i = 0; i < components.length; i++) {
+        animateCount(components[i], start[i], end[i])
+    }*/
+
+
+
+    //app.get('/summary/sesgo/:year/:month/:entity', function (req, res) {
+
+    function updateStatsMedio(side) {
+    	if (side == "left") {
+    		animateCount('count-casos-1', medioLeft, "casos", currentCase);
+    		animateCount('count-lideres-1', medioLeft, "lideres", currentLeader);
+    		animateCount('count-partidos-1', medioLeft, "partidos", currentPartido);
+    		animateCount('count-instituciones-1', medioLeft, "instituciones", currentInstitucion);
+    	}
+    	else if (side == "right") {
+			animateCount('count-casos-2', medioRight, "casos", currentCase);
+			animateCount('count-lideres-2', medioRight, "lideres", currentLeader);
+			animateCount('count-partidos-2', medioRight, "partidos", currentPartido);
+			animateCount('count-instituciones-2', medioRight, "instituciones", currentInstitucion);
+    	}
+    }
+
+    function updateStatsManager(entity, dropdown) {
+    	if (dropdown == "medios-1") {
+    		medioLeft = entity;
+    		updateStatsMedio("left");
+    	}
+    	else if (dropdown == "medios-2") {
+    		medioRight = entity;
+    		updateStatsMedio("right");
+    	}
+    	else {
+    		if (dropdown == "casos") {
+    			currentCase = entity;
+    			animateCount('count-casos-1', medioLeft, "casos", entity);
+    			animateCount('count-casos-2', medioRight, "casos", entity);
+    		}
+    		else if (dropdown == "lideres") {
+    			currentLeader = entity;
+    			animateCount('count-lideres-1', medioLeft, "lideres", entity);
+    			animateCount('count-lideres-2', medioRight, "lideres", entity);
+    		}
+    		else if (dropdown == "partidos") {
+    			currentPartido = entity;
+    			animateCount('count-partidos-1', medioLeft, "partidos", entity);
+    			animateCount('count-partidos-2', medioRight, "partidos", entity);
+    		}
+    		else if (dropdown == "instituciones") {
+	    		currentInstitucion = entity;
+	    		animateCount('count-instituciones-1', medioLeft, "instituciones", entity);
+    			animateCount('count-instituciones-2', medioRight, "instituciones", entity);
+    		}
+    	}
+    }
+
+	$(".dropdown-menu > li > a").on('click', {}, function (evt) {
+        var entity = $(this).attr('id');
+        var dropdown = $(this).parent().parent().attr("id");
+        console.log("dropdown", dropdown);
+        console.log("entity", entity);
+        updateStatsManager(entity, dropdown);
+        
+    });
+
+    function initDisplay() {
+		animateCount('count-casos-1', medioLeft, "casos", currentCase);
+		animateCount('count-casos-2', medioRight, "casos", currentCase);
+
+		animateCount('count-lideres-1', medioLeft, "lideres", currentLeader);
+		animateCount('count-lideres-2', medioRight, "lideres", currentLeader);
+
+		animateCount('count-partidos-1', medioLeft, "partidos", currentPartido);
+		animateCount('count-partidos-2', medioRight, "partidos", currentPartido);
+
+		animateCount('count-instituciones-1', medioLeft, "instituciones", currentInstitucion);
+		animateCount('count-instituciones-2', medioRight, "instituciones", currentInstitucion);
+    }
+
+    initDisplay();
+
+
+</script>

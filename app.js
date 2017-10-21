@@ -18,6 +18,7 @@ var csv = require('fast-csv');
 var comments = require('./lib/comments');
 var assocs = require('./lib/assocs');
 var descriptive = require('./lib/descriptive');
+var sesgo = require('./lib/sesgo');
 
 var knowledgeBasePath = "../analytics/base-conocimiento/";
 
@@ -138,19 +139,55 @@ app.get('/casos', function (req, res) {
 });
 
 app.get('/medios', function (req, res) {
-  console.log("lideres", lideres)
-  return res.render('medios.ejs', {
-    medios: paginasMedios,
-    casos: casos,
-    lideres: lideres,
-    partidos: partidos,
-    instituciones: instituciones
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() + 1;
+  
+  var sesgoCasos;
+  var sesgoLideres;
+  var sesgoPartidos
+  var sesgoInstituciones;
+
+  sesgo.getSesgoFor(month, year, "casos", function (sesgoC) {
+    sesgoCasos = sesgoC;
+    sesgo.getSesgoFor(month, year, "lideres", function (sesgoL) {
+      sesgoLideres = sesgoL;
+      sesgo.getSesgoFor(month, year, "partidos", function (sesgoP) {
+        sesgoPartidos = sesgoP;
+        sesgo.getSesgoFor(month, year, "instituciones", function (sesgoI) {
+          sesgoInstituciones = sesgoI;
+          return res.render('medios.ejs', {
+            medios: paginasMedios,
+            casos: casos,
+            lideres: lideres,
+            partidos: partidos,
+            instituciones: instituciones,
+            sesgoCasos: sesgoCasos,
+            sesgoLideres: sesgoLideres,
+            sesgoPartidos: sesgoPartidos,
+            sesgoInstituciones: sesgoInstituciones
+          });
+        });
+      });
+    });
   });
+
+  console.log("lideres", lideres)
 });
 
 //////////////////////////////////////////////////////
 //                      WS                          //
 //////////////////////////////////////////////////////
+app.get('/summary/sesgo/:year/:month/:entity', function (req, res) {
+  var entity = req.params.entity;
+  var year = parseInt(req.params.year);
+  var month = parseInt(req.params.month);
+
+  sesgo.getSesgoFor(month, year, entity, function (activity) {
+    return res.json(activity);
+  });
+
+});
 
 app.get('/summary/comments/:entity', function (req, res) {
   var entity = req.params.entity;

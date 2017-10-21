@@ -147,27 +147,19 @@
                                     <li><a id="<%= caso.short_name %>" href="#"><%= caso.friendly_name %></a></li>
                                 <% }) %>
                                 <% } %>
-                                <!--
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
-                                -->
                             </ul>
                         </div>
 
                     </div>
                     <div class="row">
-                        <!-- Line chart Publicaciones -->
-                        <div class="col-lg-12">
-                            <canvas id="myChart" width="100%" height="400"></canvas>
-                        </div>
+                        <%- include('graphs/actividad', {
+
+                        }) %>
                     </div>
                     <div class="row">
-                        <!-- Line chart Reacciones -->
-                        <div class="col-lg-12">
-                            <canvas id="reactions" width="100%" height="400"></canvas>
-                        </div>
+                        <%- include('graphs/reactions', {
+
+                        }) %>
                     </div>
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
@@ -493,246 +485,19 @@
 <script src="/js/demo.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        var monthlyLabels = [
-            <% for (var i = 0; i < casos.length; i++) {
-                if (i != casos.length -1) { %>
-                    "<%= casos[i].month %>/<%= casos[i].year %>",
-                <% }
-                   else { %>
-                    "<%= casos[i].month %>/<%= casos[i].year %>"
-                <% }
-                }
-            %>
-        ];
-        console.log(monthlyLabels);
-        var summary = null;
-        $.get("/summary/activity/casos", function (data) {
-            summary = data;
-            console.log(data);
-            displaySummaryFor("odebrecht");
-        });
+        
         
         // Javascript method's body can be found in assets/js/demos.js
         demo.initDashboardPageCharts();
-
-        function displaySummaryFor(caso) {
-            console.log("caso", caso)
-            var post_count = [];
-            var comment_count = [];
-            var angry = [];
-            var like = [];
-            var haha = [];
-            var sad = [];
-            var love = [];
-            var wow = [];
-
-            for (var i = 0; i < summary.length; i++) {
-                for (var j = 0; j < summary[i].casos.length; j++) {
-                    if (summary[i].casos[j].short_name == caso) {
-                        post_count.push(summary[i].casos[j].post_count);
-                        comment_count.push(summary[i].casos[j].comment_count);
-                        angry.push(summary[i].casos[j].angry);
-                        like.push(summary[i].casos[j].like);
-                        haha.push(summary[i].casos[j].haha);
-                        sad.push(summary[i].casos[j].sad);
-                        love.push(summary[i].casos[j].love);
-                        wow.push(summary[i].casos[j].wow);
-                        break;
-                    }
-                }
-            }
-
-            config.data.datasets[0].data = post_count;
-            config.data.datasets[1].data = comment_count;
-            configReactions.data.datasets[0].data = like;
-            configReactions.data.datasets[1].data = angry;
-            configReactions.data.datasets[2].data = haha;
-            configReactions.data.datasets[3].data = sad;
-            configReactions.data.datasets[4].data = love;
-            configReactions.data.datasets[5].data = wow;
-
-
-            window.publicaciones.update();
-            window.reactions.update();
-        }
-
-        var config = {
-            type: 'line',
-            data: {
-                // TODO: poner años programatically
-                /*labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],*/
-                labels: monthlyLabels,
-                datasets: [{
-                    label: "Cantidad de publicaciones sobre el caso",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.green,
-                    borderColor: window.chartColors.green,
-                    data: [
-                    ],
-                    fill: false
-                },
-                {
-                    label: "Cantidad de comentarios sobre el caso",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.blue_like,
-                    borderColor: window.chartColors.blue_like,
-                    data: [
-                    ],
-                    fill: false
-                }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                title:{
-                    display:true,
-                    text:'Actividad'
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Tiempo'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Valor'
-                        }
-                    }]
-                }
-            }
-        };
-
-        var configReactions = {
-            type: 'line',
-            data: {
-                // TODO: poner años programatically
-                /*labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],*/
-                labels: monthlyLabels,
-                datasets: [
-                {
-                    label: "Me gusta",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.blue_like,
-                    borderColor: window.chartColors.blue_like,
-                    data: [
-                    ],
-                    fill: false
-                },
-                {
-                    label: "Me enfada",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.red,
-                    borderColor: window.chartColors.red,
-                    data: [
-                    ],
-                    fill: false
-                },
-                {
-                    label: "Me divierte",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.happy,
-                    borderColor: window.chartColors.happy,
-                    data: [
-                    ],
-                    fill: false
-                },
-                {
-                    label: "Me entristece",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.sad,
-                    borderColor: window.chartColors.sad,
-                    data: [
-                    ],
-                    fill: false
-                },
-                {
-                    label: "Me encanta",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.love,
-                    borderColor: window.chartColors.love,
-                    data: [
-                    ],
-                    fill: false
-                },
-                {
-                    label: "Me asombra",
-                    lineTension: 0,
-                    backgroundColor: window.chartColors.surprise,
-                    borderColor: window.chartColors.surprise,
-                    data: [
-                    ],
-                    fill: false
-                }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                title:{
-                    display:true,
-                    text:'Reacciones'
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Tiempo'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Valor'
-                        }
-                    }]
-                }
-            }
-        };
-
-        var myChartCtx = document.getElementById("myChart").getContext("2d");
-        window.publicaciones = new Chart(myChartCtx, config);
-
-        var reactionsCtx = document.getElementById("reactions").getContext("2d");
-        window.reactions = new Chart(reactionsCtx, configReactions);
-
-        $("#casos > li > a").on('click', function (evt) {
-
-            var entity = $(this).attr('id');
-
-            displaySummaryFor(entity);
-            //window.publicaciones.update();
-            //window.reactions.update();
-
-            var caso = $(this).text();
-            $("#dropdown-title").text(caso + " ");
-            $("#dropdown-title").append('<b class="caret"></b>');
-        });
-
     });
-
 </script>
+<%- include('scripts/actividad', {
+    casos: casos
+}) %>
+<%- include('scripts/reactions', {
+    casos: casos
+}) %>
+<%- include('scripts/dropdown', {
+    casos: casos
+}) %>
 </html>

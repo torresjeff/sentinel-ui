@@ -1,0 +1,8 @@
+<script>
+	$(".dropdown-menu > li > a").on('click', {}, function (evt) {
+        var name = $(this).text();
+        var dropdown = $(this).parent().parent().prev();
+        dropdown.text(name + " ");
+        dropdown.append('<b class="caret"></b>');
+    });
+</script>
