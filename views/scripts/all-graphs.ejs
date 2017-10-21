@@ -1,0 +1,90 @@
+<script>
+	$(document).ready(function () {
+		var sesgoCorrupcion = <%- JSON.stringify(sesgoCorrupcion) %>;
+		var sesgoCasos = <%- JSON.stringify(sesgoCasos) %>;
+		var sesgoLideres = <%- JSON.stringify(sesgoLideres) %>;
+	    var sesgoPartidos = <%- JSON.stringify(sesgoPartidos) %>;
+	    var sesgoInstituciones = <%- JSON.stringify(sesgoInstituciones) %>;
+
+      	var casos = <%- JSON.stringify(casos) %>;
+        var lideres = <%- JSON.stringify(lideres) %>;
+        var partidos = <%- JSON.stringify(partidos) %>;
+        var instituciones = <%- JSON.stringify(instituciones) %>;
+
+        var medios = <%- JSON.stringify(medios) %>;
+        var mediosLabels = [];
+        var mediosId = [];
+        
+        for (var i = 0; i < medios.length; i++) {
+        	mediosLabels.push(medios[i].name);
+        	mediosId.push(String(medios[i].id));
+        }
+        console.log("mediosId", mediosId);
+
+        function getDataFor(mediosId, aspect, sesgo) {
+        	console.log("aspect", aspect);
+        	console.log("sesgo", sesgo);
+        	var result = [];
+        	for (var i = 0; i < mediosId.length; i++) {
+        		console.log(mediosId[i], sesgo['medios'][mediosId[i]]);
+        		result.push(sesgo['medios'][mediosId[i]][aspect]["posts"]);
+        	}
+        	return result;
+        }
+
+        var dataCorrupcion = getDataFor(mediosId, "corrupcion", sesgoCorrupcion);
+        console.log("dataCorrupcion", dataCorrupcion);
+        var dataCasos = [];
+        var dataLideres = [];
+        var dataPartidos = [];
+        var dataInstituciones = [];
+        /*for (var i = 0; i < medios.length; i++) {
+        	dataCorrupcion = getDataFor(medios[i].id);
+        }*/
+
+
+
+        var color = Chart.helpers.color;
+        var barChartData = {
+            labels: mediosLabels,
+            datasets: [{
+                label: 'Cantidad de publicaciones sobre corrupción',
+                backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.red,
+                borderWidth: 1,
+                data: dataCorrupcion
+            }]
+
+        };
+
+        var ctx = document.getElementById("publicaciones-corrupcion").getContext("2d");
+        window.barPublicacionesCorrupcion = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: false,
+                    text: 'Chart.js Bar Chart'
+                },
+                scales: {
+			        yAxes: [{
+			            ticks: {
+			                beginAtZero:true
+			            }
+			        }],
+			        xAxes: [{
+				        ticks: {
+				          autoSkip: false,
+				          maxRotation: 90,
+				          minRotation: 90
+				        }
+				    }]
+			    }
+            }
+        });
+    });
+</script>

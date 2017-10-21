@@ -19,6 +19,13 @@
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -136,47 +143,9 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
-                            <a href="mediostodo"><button id="ver-todo" class="btn btn-primary pull-right">Ver todo</button></a>
+                            <a href="medios"><button id="ver-todo" class="btn btn-primary pull-right">Comparar</button></a>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 dropdown">
-                            <a id="dropdown-title" href="#" class="btn dropdown-toggle" data-toggle="dropdown">
-                                <% if (medios.length > 0) { %>
-                                <%= medios[0].name %>
-                                <% } %>
-                                <b class="caret"></b>
-                            </a>
-                            <ul id="medios-1" class="dropdown-menu">
-                                <% if (medios.length > 0) { %>
-                                <% medios.forEach(function (medio) { %>
-                                    <li><a id="<%= medio.id %>" href="#"><%= medio.name %></a></li>
-                                <% }) %>
-                                <% } %>
-                            </ul>
-                        </div>
-                        <div class="col-md-6 dropdown">
-                            <!--<div class="pull-right">-->
-                                <a id="dropdown-title" href="#" class="btn dropdown-toggle" data-toggle="dropdown">
-                                    <!-- TODO: reemplazar por el primero en orden alfabetico (con ejs) -->
-                                    <% if (medios.length > 1) { %>
-                                    <%= medios[1].name %>
-                                    <% } else if (medios.length > 0) { %>
-                                    <%= medios[0].name %>
-                                    <% } %>
-                                    <b class="caret"></b>
-                                </a>
-                                <ul id="medios-2" class="dropdown-menu">
-                                    <% if (medios.length > 0) { %>
-                                    <% medios.forEach(function (medio) { %>
-                                        <li><a id="<%= medio.id %>" href="#"><%= medio.name %></a></li>
-                                    <% }) %>
-                                    <% } %>
-                                </ul>
-                            <!--</div>-->
-                        </div>
-                    </div>
-                    <br>
                     <div class="row">
                         <!-- TODO: template titulos, etc. -->
                         <h3>Publicaciones sobre corrupción</h3>
@@ -189,13 +158,11 @@
                             </tbody>
                         </table>
 
-                        <div class="col-lg-6">
-                                <h2 id="count-corrupcion-1" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
-                                <p id="describe-count-corrupcion-1"></p>
-                        </div>
-                        <div class="col-lg-6">
-                                <h2 id="count-corrupcion-2" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
-                                <p id="describe-count-corrupcion-2"><i></i></p>
+                    </div>
+                    <div class="row">
+                        <!-- Line chart Publicaciones corrupcion -->
+                        <div class="col-lg-12">
+                            <canvas id="publicaciones-corrupcion"></canvas>
                         </div>
                     </div>
                     <div class="row">
@@ -402,6 +369,7 @@
 <!--  Charts Plugin -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
 <script src="/js/chartist.min.js"></script>
+<script src="/js/Chart.bundle.min.js"></script>
 <script src="/js/utils.js"></script>
 <!--  Dynamic Elements plugin -->
 <script src="/js/arrive.min.js"></script>
@@ -421,25 +389,24 @@
         // TODO: poner años programatically
         /*labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],*/
 
+
+
         //window.myLine = new Chart(ctx, config);
+
     });
 </script>
 <%- include('scripts/dropdown', {
     
 }) %>
-<%- include('scripts/medios', {
+<%- include('scripts/all-graphs', {
     medios: medios,
     casos: casos,
     lideres: lideres,
     partidos: partidos,
     instituciones: instituciones,
-    sesgoCorrupcion: sesgoCorrupcion,
     sesgoCasos: sesgoCasos,
     sesgoLideres: sesgoLideres,
     sesgoPartidos: sesgoPartidos,
     sesgoInstituciones: sesgoInstituciones
-}) %>
-<%- include('scripts/all-graphs', {
-    
 }) %>
 </html>

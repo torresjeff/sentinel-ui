@@ -13,6 +13,7 @@
 	console.log("medioLeft", medioLeft);
 	console.log("medioRight", medioRight);
 
+	var sesgoCorrupcion = <%- JSON.stringify(sesgoCorrupcion) %>;
 	var sesgoCasos = <%- JSON.stringify(sesgoCasos) %>;
 	var sesgoLideres = <%- JSON.stringify(sesgoLideres) %>;
     var sesgoPartidos = <%- JSON.stringify(sesgoPartidos) %>;
@@ -42,7 +43,22 @@
         var end = 0;
         var outlier = "normal";
 
-        if (aspect == "casos") {
+        if (aspect == "corrupcion") {
+	        end = sesgoCorrupcion['medios'][idMedio][aspect]["posts"];
+	        outlier = sesgoCorrupcion['medios'][idMedio][aspect]["outlier"];
+
+	        var counterDescriptionId = "#describe-" + idCounter;
+	        if (outlier == "normal") {
+	        	$(counterDescriptionId).html("<i></i>");
+	        }
+	        else if (outlier == "small") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre corrupción menos de lo normal</i>");
+	        }
+	        else if (outlier == "large") {
+	        	$(counterDescriptionId).html("<i>Este medio publica sobre corrupción más de lo normal</i>");
+	        }
+        }
+        else if (aspect == "casos") {
 	        end = sesgoCasos['medios'][idMedio][idAspect]["posts"];
 	        outlier = sesgoCasos['medios'][idMedio][idAspect]["outlier"];
 
@@ -111,22 +127,20 @@
         }
     }
 
-    /*for (var i = 0; i < components.length; i++) {
-        animateCount(components[i], start[i], end[i])
-    }*/
-
 
 
     //app.get('/summary/sesgo/:year/:month/:entity', function (req, res) {
 
     function updateStatsMedio(side) {
     	if (side == "left") {
+    		animateCount('count-corrupcion-1', medioLeft, "corrupcion");
     		animateCount('count-casos-1', medioLeft, "casos", currentCase);
     		animateCount('count-lideres-1', medioLeft, "lideres", currentLeader);
     		animateCount('count-partidos-1', medioLeft, "partidos", currentPartido);
     		animateCount('count-instituciones-1', medioLeft, "instituciones", currentInstitucion);
     	}
     	else if (side == "right") {
+    		animateCount('count-corrupcion-2', medioRight, "corrupcion");
 			animateCount('count-casos-2', medioRight, "casos", currentCase);
 			animateCount('count-lideres-2', medioRight, "lideres", currentLeader);
 			animateCount('count-partidos-2', medioRight, "partidos", currentPartido);
@@ -177,6 +191,9 @@
     });
 
     function initDisplay() {
+    	animateCount('count-corrupcion-1', medioLeft, "corrupcion");
+		animateCount('count-corrupcion-2', medioRight, "corrupcion");
+
 		animateCount('count-casos-1', medioLeft, "casos", currentCase);
 		animateCount('count-casos-2', medioRight, "casos", currentCase);
 

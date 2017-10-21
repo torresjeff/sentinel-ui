@@ -143,36 +143,78 @@ app.get('/medios', function (req, res) {
   var year = today.getFullYear();
   var month = today.getMonth() + 1;
   
+  var sesgoCorrupcion;
   var sesgoCasos;
   var sesgoLideres;
   var sesgoPartidos
   var sesgoInstituciones;
-
-  sesgo.getSesgoFor(month, year, "casos", function (sesgoC) {
-    sesgoCasos = sesgoC;
-    sesgo.getSesgoFor(month, year, "lideres", function (sesgoL) {
-      sesgoLideres = sesgoL;
-      sesgo.getSesgoFor(month, year, "partidos", function (sesgoP) {
-        sesgoPartidos = sesgoP;
-        sesgo.getSesgoFor(month, year, "instituciones", function (sesgoI) {
-          sesgoInstituciones = sesgoI;
-          return res.render('medios.ejs', {
-            medios: paginasMedios,
-            casos: casos,
-            lideres: lideres,
-            partidos: partidos,
-            instituciones: instituciones,
-            sesgoCasos: sesgoCasos,
-            sesgoLideres: sesgoLideres,
-            sesgoPartidos: sesgoPartidos,
-            sesgoInstituciones: sesgoInstituciones
+  sesgo.getSesgoFor(month, year, "corrupcion", function (sesgoCor) {
+    sesgoCorrupcion = sesgoCor;
+    sesgo.getSesgoFor(month, year, "casos", function (sesgoC) {
+      sesgoCasos = sesgoC;
+      sesgo.getSesgoFor(month, year, "lideres", function (sesgoL) {
+        sesgoLideres = sesgoL;
+        sesgo.getSesgoFor(month, year, "partidos", function (sesgoP) {
+          sesgoPartidos = sesgoP;
+          sesgo.getSesgoFor(month, year, "instituciones", function (sesgoI) {
+            sesgoInstituciones = sesgoI;
+            return res.render('medios.ejs', {
+              medios: paginasMedios,
+              casos: casos,
+              lideres: lideres,
+              partidos: partidos,
+              instituciones: instituciones,
+              sesgoCorrupcion: sesgoCorrupcion,
+              sesgoCasos: sesgoCasos,
+              sesgoLideres: sesgoLideres,
+              sesgoPartidos: sesgoPartidos,
+              sesgoInstituciones: sesgoInstituciones
+            });
           });
         });
       });
     });
   });
+});
 
-  console.log("lideres", lideres)
+
+app.get('/mediostodo', function (req, res) {
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() + 1;
+  
+  var sesgoCorrupcion;
+  var sesgoCasos;
+  var sesgoLideres;
+  var sesgoPartidos
+  var sesgoInstituciones;
+  sesgo.getSesgoFor(month, year, "corrupcion", function (sesgoCor) {
+    sesgoCorrupcion = sesgoCor;
+    sesgo.getSesgoFor(month, year, "casos", function (sesgoC) {
+      sesgoCasos = sesgoC;
+      sesgo.getSesgoFor(month, year, "lideres", function (sesgoL) {
+        sesgoLideres = sesgoL;
+        sesgo.getSesgoFor(month, year, "partidos", function (sesgoP) {
+          sesgoPartidos = sesgoP;
+          sesgo.getSesgoFor(month, year, "instituciones", function (sesgoI) {
+            sesgoInstituciones = sesgoI;
+            return res.render('mediostodo.ejs', {
+              medios: paginasMedios,
+              casos: casos,
+              lideres: lideres,
+              partidos: partidos,
+              instituciones: instituciones,
+              sesgoCorrupcion: sesgoCorrupcion,
+              sesgoCasos: sesgoCasos,
+              sesgoLideres: sesgoLideres,
+              sesgoPartidos: sesgoPartidos,
+              sesgoInstituciones: sesgoInstituciones
+            });
+          });
+        });
+      });
+    });
+  });
 });
 
 //////////////////////////////////////////////////////
