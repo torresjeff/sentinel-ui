@@ -148,6 +148,10 @@ app.get('/medios', function (req, res) {
   var sesgoLideres;
   var sesgoPartidos
   var sesgoInstituciones;
+  var sesgoCorrupcionLideres;
+  var sesgoCorrupcionPartidos;
+  var sesgoCorrupcionInstituciones;
+
   sesgo.getSesgoFor(month, year, "corrupcion", function (sesgoCor) {
     sesgoCorrupcion = sesgoCor;
     sesgo.getSesgoFor(month, year, "casos", function (sesgoC) {
@@ -158,23 +162,35 @@ app.get('/medios', function (req, res) {
           sesgoPartidos = sesgoP;
           sesgo.getSesgoFor(month, year, "instituciones", function (sesgoI) {
             sesgoInstituciones = sesgoI;
-            return res.render('medios.ejs', {
-              medios: paginasMedios,
-              casos: casos,
-              lideres: lideres,
-              partidos: partidos,
-              instituciones: instituciones,
-              sesgoCorrupcion: sesgoCorrupcion,
-              sesgoCasos: sesgoCasos,
-              sesgoLideres: sesgoLideres,
-              sesgoPartidos: sesgoPartidos,
-              sesgoInstituciones: sesgoInstituciones
-            });
-          });
-        });
-      });
-    });
-  });
+            sesgo.getSesgoFor(month, year, "corrupcion-lideres", function (sesgoCL) {
+              sesgoCorrupcionLideres =  sesgoCL;
+              sesgo.getSesgoFor(month, year, "corrupcion-partidos", function (sesgoCP) {
+                sesgoCorrupcionPartidos = sesgoCP;
+                sesgo.getSesgoFor(month, year, "corrupcion-instituciones", function (sesgoCI) {
+                  sesgoCorrupcionInstituciones = sesgoCI;
+                  return res.render('medios.ejs', {
+                    medios: paginasMedios,
+                    casos: casos,
+                    lideres: lideres,
+                    partidos: partidos,
+                    instituciones: instituciones,
+                    sesgoCorrupcion: sesgoCorrupcion,
+                    sesgoCasos: sesgoCasos,
+                    sesgoLideres: sesgoLideres,
+                    sesgoPartidos: sesgoPartidos,
+                    sesgoInstituciones: sesgoInstituciones,
+                    sesgoCorrupcionLideres: sesgoCorrupcionLideres,
+                    sesgoCorrupcionPartidos: sesgoCorrupcionPartidos,
+                    sesgoCorrupcionInstituciones: sesgoCorrupcionInstituciones
+                  });
+                }); // corrupcion-instituciones
+              }); // corrupcion-partidos
+            }); // corrupcion-lideres
+          }); // corrupcion-instituciones
+        }); // partidos
+      }); // lideres
+    }); // casos
+  }); // corrupcion
 });
 
 
@@ -188,6 +204,10 @@ app.get('/mediostodo', function (req, res) {
   var sesgoLideres;
   var sesgoPartidos
   var sesgoInstituciones;
+  var sesgoCorrupcionLideres;
+  var sesgoCorrupcionPartidos;
+  var sesgoCorrupcionInstituciones;
+
   sesgo.getSesgoFor(month, year, "corrupcion", function (sesgoCor) {
     sesgoCorrupcion = sesgoCor;
     sesgo.getSesgoFor(month, year, "casos", function (sesgoC) {
@@ -198,23 +218,35 @@ app.get('/mediostodo', function (req, res) {
           sesgoPartidos = sesgoP;
           sesgo.getSesgoFor(month, year, "instituciones", function (sesgoI) {
             sesgoInstituciones = sesgoI;
-            return res.render('mediostodo.ejs', {
-              medios: paginasMedios,
-              casos: casos,
-              lideres: lideres,
-              partidos: partidos,
-              instituciones: instituciones,
-              sesgoCorrupcion: sesgoCorrupcion,
-              sesgoCasos: sesgoCasos,
-              sesgoLideres: sesgoLideres,
-              sesgoPartidos: sesgoPartidos,
-              sesgoInstituciones: sesgoInstituciones
-            });
-          });
-        });
-      });
-    });
-  });
+            sesgo.getSesgoFor(month, year, "corrupcion-lideres", function (sesgoCL) {
+              sesgoCorrupcionLideres =  sesgoCL;
+              sesgo.getSesgoFor(month, year, "corrupcion-partidos", function (sesgoCP) {
+                sesgoCorrupcionPartidos = sesgoCP;
+                sesgo.getSesgoFor(month, year, "corrupcion-instituciones", function (sesgoCI) {
+                  sesgoCorrupcionInstituciones = sesgoCI;
+                  return res.render('mediostodo.ejs', {
+                    medios: paginasMedios,
+                    casos: casos,
+                    lideres: lideres,
+                    partidos: partidos,
+                    instituciones: instituciones,
+                    sesgoCorrupcion: sesgoCorrupcion,
+                    sesgoCasos: sesgoCasos,
+                    sesgoLideres: sesgoLideres,
+                    sesgoPartidos: sesgoPartidos,
+                    sesgoInstituciones: sesgoInstituciones,
+                    sesgoCorrupcionLideres: sesgoCorrupcionLideres,
+                    sesgoCorrupcionPartidos: sesgoCorrupcionPartidos,
+                    sesgoCorrupcionInstituciones: sesgoCorrupcionInstituciones
+                  });
+                }); // corrupcion-instituciones
+              }); // corrupcion-partidos
+            }); // corrupcion-lideres
+          }); // corrupcion-instituciones
+        }); // partidos
+      }); // lideres
+    }); // casos
+  }); // corrupcion
 });
 
 //////////////////////////////////////////////////////

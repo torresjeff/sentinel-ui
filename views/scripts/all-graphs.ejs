@@ -5,6 +5,12 @@
 		var sesgoLideres = <%- JSON.stringify(sesgoLideres) %>;
 	    var sesgoPartidos = <%- JSON.stringify(sesgoPartidos) %>;
 	    var sesgoInstituciones = <%- JSON.stringify(sesgoInstituciones) %>;
+	    var sesgoCorrupcionLideres = <%- JSON.stringify(sesgoCorrupcionLideres) %>;
+	    var sesgoCorrupcionPartidos = <%- JSON.stringify(sesgoCorrupcionPartidos) %>;
+	    var sesgoCorrupcionInstituciones = <%- JSON.stringify(sesgoCorrupcionInstituciones) %>;
+	    console.log(sesgoCorrupcionLideres);
+	    console.log(sesgoCorrupcionPartidos);
+	    console.log(sesgoCorrupcionInstituciones);
 
       	var casos = <%- JSON.stringify(casos) %>;
         var lideres = <%- JSON.stringify(lideres) %>;
@@ -14,77 +20,215 @@
         var medios = <%- JSON.stringify(medios) %>;
         var mediosLabels = [];
         var mediosId = [];
-        
+
         for (var i = 0; i < medios.length; i++) {
         	mediosLabels.push(medios[i].name);
         	mediosId.push(String(medios[i].id));
         }
-        console.log("mediosId", mediosId);
+        
+        var currentCase = "odebrecht";
+		var currentLeader = "<%= lideres[0].id %>";
+		var currentPartido = "<%= partidos[0].id %>";
+		var currentInstitucion = "<%= instituciones[0].id %>";
 
         function getDataFor(mediosId, aspect, sesgo) {
         	console.log("aspect", aspect);
         	console.log("sesgo", sesgo);
         	var result = [];
         	for (var i = 0; i < mediosId.length; i++) {
-        		console.log(mediosId[i], sesgo['medios'][mediosId[i]]);
         		result.push(sesgo['medios'][mediosId[i]][aspect]["posts"]);
         	}
         	return result;
         }
 
-        var dataCorrupcion = getDataFor(mediosId, "corrupcion", sesgoCorrupcion);
-        console.log("dataCorrupcion", dataCorrupcion);
-        var dataCasos = [];
-        var dataLideres = [];
-        var dataPartidos = [];
-        var dataInstituciones = [];
-        /*for (var i = 0; i < medios.length; i++) {
-        	dataCorrupcion = getDataFor(medios[i].id);
-        }*/
-
-
-
         var color = Chart.helpers.color;
-        var barChartData = {
-            labels: mediosLabels,
-            datasets: [{
-                label: 'Cantidad de publicaciones sobre corrupción',
-                backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-                borderColor: window.chartColors.red,
-                borderWidth: 1,
-                data: dataCorrupcion
-            }]
+        var dataCorrupcion = getDataFor(mediosId, "corrupcion", sesgoCorrupcion);
+        var dataCasos = getDataFor(mediosId, currentCase, sesgoCasos);
+        var dataLideres = getDataFor(mediosId, currentLeader, sesgoLideres);
+        var dataPartidos = getDataFor(mediosId, currentPartido, sesgoPartidos);
+        var dataInstituciones = getDataFor(mediosId, currentInstitucion, sesgoInstituciones);
+        var dataCorrupcionLideres = getDataFor(mediosId, currentLeader, sesgoCorrupcionLideres);
+        var dataCorrupcionPartidos = getDataFor(mediosId, currentPartido, sesgoCorrupcionPartidos);
+        var dataCorrupcionInstituciones = getDataFor(mediosId, currentInstitucion, sesgoCorrupcionInstituciones);
 
-        };
+        function updateGraph(graphId, labels, data, firstTime=false) {
+	        var barChartData = {
+	            labels: labels,
+	            datasets: data
+	        };
 
-        var ctx = document.getElementById("publicaciones-corrupcion").getContext("2d");
-        window.barPublicacionesCorrupcion = new Chart(ctx, {
-            type: 'bar',
-            data: barChartData,
-            options: {
-                responsive: true,
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: false,
-                    text: 'Chart.js Bar Chart'
-                },
-                scales: {
-			        yAxes: [{
-			            ticks: {
-			                beginAtZero:true
-			            }
-			        }],
-			        xAxes: [{
-				        ticks: {
-				          autoSkip: false,
-				          maxRotation: 90,
-				          minRotation: 90
-				        }
-				    }]
-			    }
-            }
-        });
+	        console.log("data", data);
+	        
+        	//barChartData.datasets = data;
+
+	        if (firstTime) {
+		        var ctx = document.getElementById(graphId).getContext("2d");
+		        window[graphId] = new Chart(ctx, {
+		            type: 'bar',
+		            data: barChartData,
+		            options: {
+		                responsive: true,
+		                legend: {
+		                    position: 'top',
+		                },
+		                title: {
+		                    display: false,
+		                    text: 'Publicaciones sobre corrupción'
+		                },
+		                scales: {
+					        yAxes: [{
+					            ticks: {
+					                beginAtZero:true
+					            }
+					        }],
+					        xAxes: [{
+						        ticks: {
+						          autoSkip: false,
+						          maxRotation: 90,
+						          minRotation: 90
+						        }
+						    }]
+					    }
+		            }
+		        });
+	        	
+	        	window[graphId].update()
+	        }
+	        else {
+	        	window[graphId].data = barChartData;
+	        	window[graphId].update()
+	        }
+
+        }
+
+        updateGraph('publicaciones-corrupcion', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre corrupción',
+	                backgroundColor: color(window.chartColors['red']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['red'],
+	                borderWidth: 1,
+	                data: dataCorrupcion
+	            }], true);
+        updateGraph('casos-corrupcion', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre el caso de corrupción',
+	                backgroundColor: color(window.chartColors['orange']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['orange'],
+	                borderWidth: 1,
+	                data: dataCasos
+	            }], true);
+        updateGraph('lideres-opinion', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre el lider de opinión',
+	                backgroundColor: color(window.chartColors['blue']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['blue'],
+	                borderWidth: 1,
+	                data: dataLideres
+	            }, {
+	            	label: 'Cantidad de publicaciones de corrupción que mencionan a este lider de opinión',
+	                backgroundColor: color(window.chartColors['red']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['red'],
+	                borderWidth: 1,
+	                data: dataCorrupcionLideres
+	            }], true);
+        updateGraph('partidos-politicos', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre el partido político',
+	                backgroundColor: color(window.chartColors['yellow']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['yellow'],
+	                borderWidth: 1,
+	                data: dataPartidos
+	            }, {
+	            	label: 'Cantidad de publicaciones de corrupción que mencionan a este partido político',
+	                backgroundColor: color(window.chartColors['red']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['red'],
+	                borderWidth: 1,
+	                data: dataCorrupcionPartidos
+	            }],  true);
+        updateGraph('publicaciones-instituciones', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre la institución',
+	                backgroundColor: color(window.chartColors['green']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['green'],
+	                borderWidth: 1,
+	                data: dataInstituciones
+	            }, {
+	            	label: 'Cantidad de publicaciones de corrupción que mencionan a esta institución',
+	                backgroundColor: color(window.chartColors['red']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['red'],
+	                borderWidth: 1,
+	                data: dataCorrupcionInstituciones
+	            }], true);
+
+	    function updateStatsManager(entity, dropdown) {
+    		if (dropdown == "casos") {
+    			currentCase = entity;
+    			dataCasos = getDataFor(mediosId, currentCase, sesgoCasos);
+    			updateGraph('casos-corrupcion', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre el caso de corrupción',
+	                backgroundColor: color(window.chartColors['orange']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['orange'],
+	                borderWidth: 1,
+	                data: dataCasos
+	            }]);
+    		}
+    		else if (dropdown == "lideres") {
+    			currentLeader = entity;
+	        	dataLideres = getDataFor(mediosId, currentLeader, sesgoLideres);
+	        	dataCorrupcionLideres = getDataFor(mediosId, currentLeader, sesgoCorrupcionLideres);
+    			updateGraph('lideres-opinion', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre el lider de opinión',
+	                backgroundColor: color(window.chartColors['blue']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['blue'],
+	                borderWidth: 1,
+	                data: dataLideres
+	            }, {
+	            	label: 'Cantidad de publicaciones de corrupción que mencionan a este lider de opinión',
+	                backgroundColor: color(window.chartColors['red']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['red'],
+	                borderWidth: 1,
+	                data: dataCorrupcionLideres
+	            }]);
+    		}
+    		else if (dropdown == "partidos") {
+    			currentPartido = entity;
+		        dataPartidos = getDataFor(mediosId, currentPartido, sesgoPartidos);
+		        dataCorrupcionPartidos = getDataFor(mediosId, currentPartido, sesgoCorrupcionPartidos);
+    			updateGraph('partidos-politicos', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre el partido político',
+	                backgroundColor: color(window.chartColors['yellow']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['yellow'],
+	                borderWidth: 1,
+	                data: dataPartidos
+	            }, {
+	            	label: 'Cantidad de publicaciones de corrupción que mencionan a este partido político',
+	                backgroundColor: color(window.chartColors['red']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['red'],
+	                borderWidth: 1,
+	                data: dataCorrupcionPartidos
+	            }]);
+    		}
+    		else if (dropdown == "instituciones") {
+	    		currentInstitucion = entity;
+		        dataInstituciones = getDataFor(mediosId, currentInstitucion, sesgoInstituciones);
+		        dataCorrupcionInstituciones = getDataFor(mediosId, currentInstitucion, sesgoCorrupcionInstituciones);
+	    		updateGraph('publicaciones-instituciones', mediosLabels, [{
+	                label: 'Cantidad de publicaciones sobre la institución',
+	                backgroundColor: color(window.chartColors['green']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['green'],
+	                borderWidth: 1,
+	                data: dataInstituciones
+	            }, {
+	            	label: 'Cantidad de publicaciones de corrupción que mencionan a esta institución',
+	                backgroundColor: color(window.chartColors['red']).alpha(0.5).rgbString(),
+	                borderColor: window.chartColors['red'],
+	                borderWidth: 1,
+	                data: dataCorrupcionInstituciones
+	            }]);
+    		}
+	    }
+
+		$(".dropdown-menu > li > a").on('click', {}, function (evt) {
+	        var entity = $(this).attr('id');
+	        var dropdown = $(this).parent().parent().attr("id");
+	        updateStatsManager(entity, dropdown);
+	        
+	    });
+
     });
 </script>
