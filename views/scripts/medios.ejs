@@ -18,6 +18,9 @@
 	var sesgoLideres = <%- JSON.stringify(sesgoLideres) %>;
     var sesgoPartidos = <%- JSON.stringify(sesgoPartidos) %>;
     var sesgoInstituciones = <%- JSON.stringify(sesgoInstituciones) %>;
+    var sesgoCorrupcionLideres = <%- JSON.stringify(sesgoCorrupcionLideres) %>;
+    var sesgoCorrupcionPartidos = <%- JSON.stringify(sesgoCorrupcionPartidos) %>;
+    var sesgoCorrupcionInstituciones = <%- JSON.stringify(sesgoCorrupcionInstituciones) %>;
 
 	var components = [
         'count-casos-1',
@@ -41,13 +44,15 @@
         };
 
         var end = 0;
-        var outlier = "normal";
+        var outlier = "";
+        var outlierCorrupcion = "";
 
         if (aspect == "corrupcion") {
 	        end = sesgoCorrupcion['medios'][idMedio][aspect]["posts"];
 	        outlier = sesgoCorrupcion['medios'][idMedio][aspect]["outlier"];
 
 	        var counterDescriptionId = "#describe-" + idCounter;
+
 	        if (outlier == "normal") {
 	        	$(counterDescriptionId).html("<i></i>");
 	        }
@@ -63,6 +68,7 @@
 	        outlier = sesgoCasos['medios'][idMedio][idAspect]["outlier"];
 
 	        var counterDescriptionId = "#describe-" + idCounter;
+
 	        if (outlier == "normal") {
 	        	$(counterDescriptionId).html("<i></i>");
 	        }
@@ -76,8 +82,11 @@
         else if (aspect == "lideres") {
         	end = sesgoLideres['medios'][idMedio][idAspect]["posts"];
 	        outlier = sesgoLideres['medios'][idMedio][idAspect]["outlier"];
+            outlierCorrupcion = sesgoCorrupcionLideres['medios'][idMedio][idAspect]["outlier"];
+	        
+            var counterDescriptionId = "#describe-" + idCounter;
+            var counterDescriptionCorrupcionId = "#describe-corrupcion-" + idCounter;
 
-	        var counterDescriptionId = "#describe-" + idCounter;
 	        if (outlier == "normal") {
 	        	$(counterDescriptionId).html("<i></i>");
 	        }
@@ -87,12 +96,25 @@
 	        else if (outlier == "large") {
 	        	$(counterDescriptionId).html("<i>Este medio publica sobre este lider de opinión más de lo normal</i>");
 	        }
+
+            if (outlierCorrupcion == "normal") {
+                $(counterDescriptionCorrupcionId).html("<i></i>");
+            }
+            else if (outlier == "small") {
+                $(counterDescriptionCorrupcionId).html("<i>Este medio publica sobre corrupción de este lider de opinión menos de lo normal</i>");
+            }
+            else if (outlier == "large") {
+                $(counterDescriptionCorrupcionId).html("<i>Este medio publica sobre corrupción de este lider de opinión más de lo normal</i>");
+            }
         }
         else if (aspect == "partidos") {
         	end = sesgoPartidos['medios'][idMedio][idAspect]["posts"];
 	        outlier = sesgoPartidos['medios'][idMedio][idAspect]["outlier"];
+            outlierCorrupcion = sesgoCorrupcionPartidos['medios'][idMedio][idAspect]["outlier"];
 
 	        var counterDescriptionId = "#describe-" + idCounter;
+            var counterDescriptionCorrupcionId = "#describe-corrupcion-" + idCounter;
+
 	        if (outlier == "normal") {
 	        	$(counterDescriptionId).html("<i></i>");
 	        }
@@ -102,12 +124,25 @@
 	        else if (outlier == "large") {
 	        	$(counterDescriptionId).html("<i>Este medio publica sobre este partido político más de lo normal</i>");
 	        }
+
+            if (outlierCorrupcion == "normal") {
+                $(counterDescriptionCorrupcionId).html("<i></i>");
+            }
+            else if (outlier == "small") {
+                $(counterDescriptionCorrupcionId).html("<i>Este medio publica sobre corrupción en este partido político menos de lo normal</i>");
+            }
+            else if (outlier == "large") {
+                $(counterDescriptionCorrupcionId).html("<i>Este medio publica sobre corrupción en este partido político más de lo normal</i>");
+            }
         }
         else if (aspect == "instituciones") {
         	end = sesgoInstituciones['medios'][idMedio][idAspect]["posts"];
 	        outlier = sesgoInstituciones['medios'][idMedio][idAspect]["outlier"];
+            outlierCorrupcion = sesgoCorrupcionInstituciones['medios'][idMedio][idAspect]["outlier"];
 
 	        var counterDescriptionId = "#describe-" + idCounter;
+            var counterDescriptionCorrupcionId = "#describe-corrupcion-" + idCounter;
+
 	        if (outlier == "normal") {
 	        	$(counterDescriptionId).html("<i></i>");
 	        }
@@ -117,6 +152,16 @@
 	        else if (outlier == "large") {
 	        	$(counterDescriptionId).html("<i>Este medio publica sobre esta institución más de lo normal</i>");
 	        }
+
+            if (outlierCorrupcion == "normal") {
+                $(counterDescriptionCorrupcionId).html("<i></i>");
+            }
+            else if (outlier == "small") {
+                $(counterDescriptionCorrupcionId).html("<i>Este medio publica sobre corrupción en esta institución menos de lo normal</i>");
+            }
+            else if (outlier == "large") {
+                $(counterDescriptionCorrupcionId).html("<i>Este medio publica sobre corrupción en esta institución más de lo normal</i>");
+            }
         }
 
         var counter = new CountUp(idCounter, 0, end, 0, 1.5, options);
