@@ -1,7 +1,7 @@
 <script>
 	$(document).ready(function () {
-		console.log(monthlyLabels);
 	    var summary = null;
+	    var entity = "<%=entity%>";
 
 		var monthlyLabels = [
 	        <% for (var i = 0; i < casos.length; i++) {
@@ -15,6 +15,8 @@
 	        %>
 	    ];
 
+		console.log(monthlyLabels);
+
 		function displaySummaryFor(caso) {
             console.log("caso", caso)
             var post_count = [];
@@ -27,16 +29,16 @@
             var wow = [];
 
             for (var i = 0; i < summary.length; i++) {
-                for (var j = 0; j < summary[i].casos.length; j++) {
-                    if (summary[i].casos[j].short_name == caso) {
-                        post_count.push(summary[i].casos[j].post_count);
-                        comment_count.push(summary[i].casos[j].comment_count);
-                        angry.push(summary[i].casos[j].angry);
-                        like.push(summary[i].casos[j].like);
-                        haha.push(summary[i].casos[j].haha);
-                        sad.push(summary[i].casos[j].sad);
-                        love.push(summary[i].casos[j].love);
-                        wow.push(summary[i].casos[j].wow);
+                for (var j = 0; j < summary[i][entity].length; j++) {
+                    if (summary[i][entity][j].short_name == caso) {
+                        post_count.push(summary[i][entity][j].post_count);
+                        comment_count.push(summary[i][entity][j].comment_count);
+                        angry.push(summary[i][entity][j].angry);
+                        like.push(summary[i][entity][j].like);
+                        haha.push(summary[i][entity][j].haha);
+                        sad.push(summary[i][entity][j].sad);
+                        love.push(summary[i][entity][j].love);
+                        wow.push(summary[i][entity][j].wow);
                         break;
                     }
                 }
@@ -56,6 +58,19 @@
             window.reactions.update();
         }
 
+        var labelPublicaciones = "";
+        var labelComentarios = "";
+        if (entity == "lideres") {
+        	labelPublicaciones = "Cantidad de publicaciones sobre el líder";
+        	labelComentarios = "Cantidad de comentarios sobre el líder";
+        }
+        else if (entity == "casos") {
+        	labelPublicaciones = "Cantidad de publicaciones sobre el caso";
+        	labelComentarios = "Cantidad de comentarios sobre el caso";
+        }
+
+
+
         var configActividad = {
             type: 'line',
             data: {
@@ -63,7 +78,7 @@
                 /*labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],*/
                 labels: monthlyLabels,
                 datasets: [{
-                    label: "Cantidad de publicaciones sobre el caso",
+                    label: labelPublicaciones,
                     lineTension: 0,
                     backgroundColor: window.chartColors.green,
                     borderColor: window.chartColors.green,
@@ -72,7 +87,7 @@
                     fill: false
                 },
                 {
-                    label: "Cantidad de comentarios sobre el caso",
+                    label: labelComentarios,
                     lineTension: 0,
                     backgroundColor: window.chartColors.blue_like,
                     borderColor: window.chartColors.blue_like,
@@ -218,10 +233,10 @@
 	    var reactionsCtx = document.getElementById("reactions").getContext("2d");
 	    window.reactions = new Chart(reactionsCtx, configReactions);
 
-        $.get("/summary/activity/casos", function (data) {
+        $.get("/summary/activity/<%=entity%>", function (data) {
 	        summary = data;
-	        console.log(data);
-	        displaySummaryFor("odebrecht");
+	        console.log("DATA IS",data);
+	        displaySummaryFor("<%=displayDefault%>");
 	    });
 
 	    $(".dropdown-menu > li > a").on('click', {}, function (evt) {

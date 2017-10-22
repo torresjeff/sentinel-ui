@@ -45,7 +45,7 @@
                     <li class="active">
                         <a href="/lideres">
                             <i class="material-icons">group</i>
-                            <p>Líderes</p>
+                            <p>Líderes de opinión</p>
                         </a>
                     </li>
                     <li>
@@ -121,6 +121,15 @@
                         </div>
 
                     </div>
+                    <div id="facebook-info" class="row">
+                        <div id="stats-display" class="col-md-12">
+                            <% if  (hasPage) { %>
+                                <h2 id="count-likes">0</h2><h4>likes</h4>
+                            <% } else { %>
+                                <h2 id="count-likes"></h2><h4></h4>
+                            <% } %>
+                        </div>
+                    </div>
                     <div class="row">
                         <%- include('graphs/comments-sentiment', {
                             summary: summary
@@ -135,6 +144,11 @@
                     <div class="row">
                         <%- include('graphs/actividad', {
                             summary: summary
+                        }) %>
+                    </div>
+                    <div class="row">
+                        <%- include('graphs/reactions', {
+
                         }) %>
                     </div>
                     <div class="row">
@@ -226,6 +240,7 @@
 <script src="/js/material-dashboard.js?v=1.2.0"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="/js/demo.js"></script>
+<script src="/js/countUp.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         
@@ -253,5 +268,21 @@
 }) %>
 <%- include('scripts/comments-sentiment.ejs', {
     summary: summary
+}) %>
+<%- include('scripts/actividad', {
+    casos: casos,
+    entity: "lideres",
+    displayDefault: lideres[0].id
+}) %>
+<%- include('scripts/reactions', {
+    casos: casos,
+    entity: "lideres",
+    displayDefault: lideres[0].id
+}) %>
+<%- include('scripts/count-likes', {
+    hasPage: hasPage,
+    pageId: pageId,
+    numberLikes: numberLikes,
+    lideres: lideres
 }) %>
 </html>

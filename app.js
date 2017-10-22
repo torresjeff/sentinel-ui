@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var fs = require('fs');
+const https = require('https');
 
 var csv = require('fast-csv');
 
@@ -29,6 +30,8 @@ var lideres = [];
 var partidos = [];
 var instituciones = [];
 
+var facebookToken = "";
+
 function readKnowledgeBase(file, callback) {
   var words = {};
   var wordsArr = []
@@ -39,12 +42,20 @@ function readKnowledgeBase(file, callback) {
       }
       words[data[2]]['synonyms'].push(data[0]);
       words[data[2]]['friendly_name'] = data[3];
+      if (data[4]) {
+        words[data[2]]['page_id'] = data[4];
+      }
     })
     .on("end", function () {
       for (var key in words) {
         // check if the property/key is defined in the object itself, not in parent
         if (words.hasOwnProperty(key)) {
-          wordsArr.push({"name": words[key]['friendly_name'], "id": key});
+          if (words[key]['page_id']) {
+            wordsArr.push({"name": words[key]['friendly_name'], "id": key, "page_id": words[key]['page_id']});
+          }
+          else {
+            wordsArr.push({"name": words[key]['friendly_name'], "id": key});
+          }
         }
       }
       callback(wordsArr);
@@ -54,12 +65,13 @@ function readKnowledgeBase(file, callback) {
 // Read all knowledge bases
 function start() {
   facebookConfig = JSON.parse(fs.readFileSync('../facebook-scraper-py/config.medios.json', 'utf8'));
-  paginasMedios = facebookConfig['pages']
+  paginasMedios = facebookConfig['pages'];
+  facebookToken = facebookConfig['credentials']['appId'] + "|" + facebookConfig['credentials']['appSecret'];
 
   readKnowledgeBase("casos-corrupcion.txt", function (res) {
     casos = res;
   });
-  readKnowledgeBase("lideres-opinion.txt", function (res) {
+  readKnowledgeBase("lideres-opinion.all.txt", function (res) {
     lideres = res;
   });
   readKnowledgeBase("partidos-politicos.txt", function (res) {
@@ -103,16 +115,68 @@ app.get('/descubre', function (req, res) {
 });
 
 app.get('/lideres', function (req, res) {
-  comments.getSentimentForLider(lideres[0].id, function (sentiments) {
-    console.log("lideres", lideres)
-    console.log(sentiments);
-    if (!lideres) {
-      return res.render('lideres.ejs', {error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.", lideres: [], summary: []});
-    }
-    else {
-      return res.render('lideres.ejs', {lideres: lideres, summary: sentiments});
-    }
-  });
+  if (lideres[0]['page_id']) {
+    console.log("lideres[0] has page_id");
+    var requestPage = 'https://graph.facebook.com/v2.9/' + lideres[0]['page_id'] + '?fields=fan_count&access_token=' + facebookToken;
+    console.log("making request to", requestPage);
+    https.get(requestPage, (resp) => {
+      let data = '';
+     
+      // A chunk of data has been recieved.
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+     
+      // The whole response has been received. Print out the result.
+      resp.on('end', () => {
+        console.log("ended request", JSON.parse(data)['fan_count']);
+        var requestRes = JSON.parse(data);
+        comments.getSentimentForLider(lideres[0].id, function (sentiments) {
+          //console.log("lideres", lideres)
+          //console.log(sentiments);
+          descriptive.getAllActivityCounts('activity_count', 'lideres', function (casos) {
+            if (!casos || !lideres) {
+              return res.render('lideres.ejs', { casos: [], lideres: [], summary: [] });
+            }
+            else {
+              return res.render('lideres.ejs', {
+                lideres: lideres,
+                summary: sentiments,
+                casos: casos,
+                hasPage: true,
+                numberLikes: requestRes['fan_count'],
+                pageId: lideres[0]['page_id']
+              });
+            }
+          });
+        });
+      });
+     
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+  }
+  else {
+    comments.getSentimentForLider(lideres[0].id, function (sentiments) {
+      //console.log("lideres", lideres)
+      //console.log(sentiments);
+      descriptive.getAllActivityCounts('activity_count', 'lideres', function (casos) {
+        if (!casos || !lideres) {
+          return res.render('lideres.ejs', { casos: [], lideres: [], summary: [] });
+        }
+        else {
+          return res.render('lideres.ejs', {
+            lideres: lideres,
+            summary: sentiments,
+            casos: casos,
+            hasPage: false,
+            numberLikes: 0,
+            pageId: ""
+          });
+        }
+      });
+    });
+  }
 });
 
 app.get('/instituciones', function (req, res) {
@@ -281,11 +345,38 @@ app.get('/summary/assocs/:year/:month/:type', function (req, res) {
 });
 
 app.get('/summary/activity/:entity', function (req, res) {
+  console.log("trying to get activity summary for", req.params.entity);
   descriptive.getAllActivityCounts("activity_count", req.params.entity, function (results) {
+    //console.log("descriptive results", results)
     return res.json(results);
   });
 });
 
+app.get('/stats/:pageId', function (req, res) {
+  var pageId = req.params.pageId;
+  var requestPage = 'https://graph.facebook.com/v2.9/' + pageId + '?fields=fan_count&access_token=' + facebookToken;
+
+  https.get(requestPage, (resp) => {
+    let data = '';
+   
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+   
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      console.log("ended request", JSON.parse(data)['fan_count']);
+      var requestRes = JSON.parse(data);
+      return res.json({
+        numberLikes: requestRes.fan_count
+      });
+    });
+   
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+});
 
 /*
 app.post('/login', passport.authenticate('local-login', {

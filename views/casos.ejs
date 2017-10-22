@@ -45,7 +45,7 @@
                     <li>
                         <a href="/lideres">
                             <i class="material-icons">group</i>
-                            <p>Líderes</p>
+                            <p>Líderes de opinión</p>
                         </a>
                     </li>
                     <li>
@@ -492,10 +492,14 @@
     });
 </script>
 <%- include('scripts/actividad', {
-    casos: casos
+    casos: casos,
+    entity: "casos",
+    displayDefault: "odebrecht"
 }) %>
 <%- include('scripts/reactions', {
-    casos: casos
+    casos: casos,
+    entity: "casos",
+    displayDefault: "odebrecht"
 }) %>
 <%- include('scripts/dropdown', {
     casos: casos
