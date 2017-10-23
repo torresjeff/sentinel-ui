@@ -1,0 +1,163 @@
+<script>
+    $(document).ready(function() {
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = today.getMonth() + 1;
+
+        var medioLeft = "<%= medios[0].id %>";
+        var medioRight = "<%= medios[1].id %>";
+        var currentCase = "odebrecht";
+        var currentLeader = "<%= lideres[0].id %>";
+        var currentPartido = "<%= partidos[0].id %>";
+        var currentInstitucion = "<%= instituciones[0].id %>";
+
+        console.log("medioLeft", medioLeft);
+        console.log("medioRight", medioRight);
+
+        /*function updateCharts(firstTime=false) {
+            dataDailySalesChart = {
+                labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+                series: [
+                    [12, 17, 7, 17, 23, 18, 38]
+                ]
+            };
+
+            optionsDailySalesChart = {
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    tension: 0
+                }),
+                low: 0,
+                high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                chartPadding: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                },
+            }
+
+            var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+
+            md.startAnimationForLineChart(dailySalesChart);
+        }*/
+
+        function updateGraph(graphId, labels, data, firstTime=false) {
+            var barChartData = {
+                labels: labels,
+                datasets: data
+            };
+
+            console.log("data", data);
+            
+            //barChartData.datasets = data;
+
+            if (firstTime) {
+                var ctx = document.getElementById(graphId).getContext("2d");
+                window[graphId] = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false,
+                            text: 'Publicaciones sobre corrupción'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                  autoSkip: false,
+                                  maxRotation: 90,
+                                  minRotation: 90
+                                }
+                            }]
+                        }
+                    }
+                });
+                
+                window[graphId].update()
+            }
+            else {
+                window[graphId].data = barChartData;
+                window[graphId].update()
+            }
+        }
+
+        function getPostCountFor(entity, pageId, callback) {
+            $.get("/summary/descriptive/posts/" + pageId + "/" + entity + "/" + currentCase, function (data) {
+                callback(data);
+            });
+        }
+
+        function updateGraphsMedio(side) {
+            console.log("updateGraphsMedio");
+            if (side == "left") {
+                getPostCountFor("casos", medioLeft, function (casos) {
+                    console.log("getPostCountFor", casos);
+                });
+                updateGraph('activity-casos-1');
+            }
+            else if (side == "right") {
+                
+            }
+        }
+
+        function initialize() {
+            getPostCountFor("casos", medioLeft, function (casos) {
+                    console.log("getPostCountFor", casos);
+                    updateGraph('activity-casos-1', casos.labels, casos.data, true);
+                });
+        }
+
+        initialize();
+
+        function updateStatsManager(entity, dropdown) {
+            if (dropdown == "medios-1") {
+                medioLeft = entity;
+                updateGraphsMedio("left");
+            }
+            else if (dropdown == "medios-2") {
+                medioRight = entity;
+                updateGraphsMedio("right");
+            }
+            else {
+                if (dropdown == "casos") {
+                    currentCase = entity;
+                    animateCount('count-casos-1', medioLeft, "casos", entity);
+                    animateCount('count-casos-2', medioRight, "casos", entity);
+                }
+                else if (dropdown == "lideres") {
+                    currentLeader = entity;
+                    animateCount('count-lideres-1', medioLeft, "lideres", entity);
+                    animateCount('count-lideres-2', medioRight, "lideres", entity);
+                }
+                else if (dropdown == "partidos") {
+                    currentPartido = entity;
+                    animateCount('count-partidos-1', medioLeft, "partidos", entity);
+                    animateCount('count-partidos-2', medioRight, "partidos", entity);
+                }
+                else if (dropdown == "instituciones") {
+                    currentInstitucion = entity;
+                    animateCount('count-instituciones-1', medioLeft, "instituciones", entity);
+                    animateCount('count-instituciones-2', medioRight, "instituciones", entity);
+                }
+            }
+        }
+
+        $(".dropdown-menu > li > a").on('click', {}, function (evt) {
+            var entity = $(this).attr('id');
+            var dropdown = $(this).parent().parent().attr("id");
+            console.log("dropdown", dropdown);
+            console.log("entity", entity);
+            updateStatsManager(entity, dropdown);
+            
+        });
+    });
+</script>

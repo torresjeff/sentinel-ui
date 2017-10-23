@@ -1,0 +1,59 @@
+<script>
+	$(document).ready(function () {
+		var hasPage = <%= hasPage %>;
+		var pageId = "<%= pageId %>";
+		var numberLikes = <%= numberLikes %>;
+		var lideres = <%- JSON.stringify(lideres) %>
+		console.log("hasPage", hasPage);
+		console.log("pageId", pageId);
+		console.log("numberLikes", numberLikes);
+		console.log("lideres", lideres);
+
+		function animateCount(idCounter, end) {
+	        var options = {
+	          useEasing: true, 
+	          useGrouping: true, 
+	          separator: '.', 
+	          decimal: ',', 
+	        };
+	        if (!$("#stats-display").is(":visible")) {
+	        	$("#stats-display").toggle();
+	        	$("#no-facebook").toggle();
+	        }
+	        var counter = new CountUp(idCounter, 0, end, 0, 1.5, options);
+	        if (!counter.error) {
+	            counter.start();
+	        } else {
+	            console.error(counter.error);
+	        }
+	    }
+
+	    if (hasPage) {
+	    	animateCount('count-likes', numberLikes);
+	    }
+		function getStats(pageId) {
+			$.get("/stats/" + pageId, function (data) {
+				animateCount('count-likes', data.numberLikes)
+			});
+		}
+
+		//animateCount('count-likes')
+		$(".dropdown-menu > li > a").on('click', {}, function (evt) {
+	        var entity = $(this).attr('id');
+	        for (var i = 0; i < lideres.length; i++) {
+	        	if (lideres[i].id == entity) {
+	        		if (lideres[i]['page_id']) {
+	        			getStats(lideres[i]['page_id']);
+	        		}
+	        		else {
+	        			if ($("#stats-display").is(":visible")) {
+				        	$("#stats-display").toggle();
+				        	$("#no-facebook").toggle();
+				        }
+	        		}
+	        		break;
+	        	}
+	        }
+	    });
+	});
+</script>

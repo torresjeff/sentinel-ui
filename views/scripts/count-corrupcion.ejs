@@ -1,0 +1,84 @@
+<script>
+	$(document).ready(function () {
+		var hasPage = <%= hasPage %>;
+		var pageId = "<%= pageId %>";
+		var numberLikes = <%= numberLikes %>;
+		var lideres = <%- JSON.stringify(lideres) %>;
+		var sesgoLideresCorrupcion = <%- JSON.stringify(sesgoLideresCorrupcion) %>;
+		console.log("sesgoLideresCorrupcion", sesgoLideresCorrupcion);
+		function animateCount(idCounter, end) {
+	        var options = {
+	          useEasing: true, 
+	          useGrouping: true, 
+	          separator: '.', 
+	          decimal: ',', 
+	        };
+
+	        var counter = new CountUp(idCounter, 0, end, 0, 1.5, options);
+	        if (!counter.error) {
+	            counter.start();
+	        } else {
+	            console.error(counter.error);
+	        }
+	    }
+
+	    if (hasPage) {
+	    	console.log("hasPage");
+	    	//console.log("sesgoLideresCorrupcion['posts'] => ", sesgoLideresCorrupcion['medios'][lideres[0]['page_id']]['corrupcion']['posts']);
+	    	animateCount('count-corrupcion', sesgoLideresCorrupcion['medios'][lideres[0]['page_id']]['corrupcion']['posts']);
+	    }
+
+	    function updateImage(idImage, pageId) {
+	    	console.log("updateImage called")
+		    var today = new Date();
+		    var year = today.getFullYear();
+		    var month = today.getMonth() + 1;
+	    	var img = "/img/wordclouds/" + year + "-" + month + "-" + pageId + ".png";
+	    	$(idImage).attr("src", img);
+	    }
+
+		$(".dropdown-menu > li > a").on('click', {}, function (evt) {
+			console.log("clicked corrupcion");
+	        var entity = $(this).attr('id');
+	        for (var i = 0; i < lideres.length; i++) {
+	        	if (lideres[i].id == entity) {
+	        		if (lideres[i]['page_id']) {
+	        			console.log("animateCount")
+	        			var pageId = lideres[i]['page_id'];
+	        			animateCount('count-corrupcion', sesgoLideresCorrupcion['medios'][lideres[i]['page_id']]['corrupcion']['posts']);
+	        			var outlier = sesgoLideresCorrupcion['medios'][lideres[i]['page_id']]['corrupcion']['outlier'];
+	        			if (outlier == "large") {
+	        				if (!$("#corrupcion-footer").is(":visible")) {
+	        					$("#corrupcion-footer").toggle();
+	        				}
+	        				$("#describe-outlier-corrupcion").html("Esta persona publica sobre corrupción considerablemente más que el resto de líderes de opinión.");
+	        			}
+	        			else if (outlier == "small") {
+	        				if (!$("#corrupcion-footer").is(":visible")) {
+	        					$("#corrupcion-footer").toggle();
+	        				}
+	        				$("#describe-outlier-corrupcion").html("Esta persona publica sobre corrupción considerablemente menos que el resto de líderes de opinión.");
+	        			}
+	        			else {
+	        				if ($("#corrupcion-footer").is(":visible")) {
+	        					$("#corrupcion-footer").toggle();
+	        					$("#describe-outlier-corrupcion").html("");
+	        				}
+	        			}
+	        			updateImage('#word-cloud', pageId);
+	        			if (!$("#subtitle-word-cloud").is(":visible")) {
+				        	$("#subtitle-word-cloud").toggle();
+				        }
+	        		}
+	        		else {
+		        		if ($("#subtitle-word-cloud").is(":visible")) {
+		        			$("#word-cloud").attr("src", "");
+		        			$("#subtitle-word-cloud").toggle();
+				        }
+	        		}
+	        		break;
+	        	}
+	        }
+	    });
+	});
+</script>

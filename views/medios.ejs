@@ -225,7 +225,16 @@
                                 </tr>
                             </tbody>
                         </table>
-
+                        <!--
+                        <div class="col-lg-6">
+                                <canvas id="activity-casos-1" width="100%" height="300"></canvas>
+                        </div>
+                        <div class="col-lg-6">
+                                <canvas id="activity-casos-2" width="100%" height="300"></canvas>
+                        </div>
+                        -->
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6">
                                 <h2 id="count-casos-1" class="text-center">0</h2><h4 class="text-center">publicaciones</h4>
                                 <p id="describe-count-casos-1"></p>
@@ -314,7 +323,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <!-- TODO: template titulos, etc. -->
                         <h3>Instituciones</h3>
                         <table class="table">
                             <tbody>
@@ -448,7 +456,19 @@
     sesgoCorrupcionPartidos: sesgoCorrupcionPartidos,
     sesgoCorrupcionInstituciones: sesgoCorrupcionInstituciones
 }) %>
-<%- include('scripts/all-graphs', {
-    
+<%- include('scripts/graphs-medios', {
+    medios: medios,
+    casos: casos,
+    lideres: lideres,
+    partidos: partidos,
+    instituciones: instituciones,
+    sesgoCorrupcion: sesgoCorrupcion,
+    sesgoCasos: sesgoCasos,
+    sesgoLideres: sesgoLideres,
+    sesgoPartidos: sesgoPartidos,
+    sesgoInstituciones: sesgoInstituciones,
+    sesgoCorrupcionLideres: sesgoCorrupcionLideres,
+    sesgoCorrupcionPartidos: sesgoCorrupcionPartidos,
+    sesgoCorrupcionInstituciones: sesgoCorrupcionInstituciones
 }) %>
 </html>

@@ -121,14 +121,133 @@
                         </div>
 
                     </div>
-                    <div id="facebook-info" class="row">
-                        <div id="stats-display" class="col-md-12">
+                    <div class="row">
+                        <h3>Estadísticas de Facebook</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <% if (hasPage) { %>
+                            <div id="no-facebook" class="col-md-12" style="display: none;">
+                                <h4>Este líder de opinión no tiene página de Facebook</h4>
+                            </div>
+                        <% } else { %>
+                            <div id="no-facebook" class="col-md-12">
+                                <h4>Este líder de opinión no tiene página de Facebook</h4>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div id="stats-display" class="row">
+                        <div class="col-md-3">
                             <% if  (hasPage) { %>
-                                <h2 id="count-likes">0</h2><h4>likes</h4>
+                                <div class="card card-stats">
+                                    <div class="card-header" data-background-color="blue">
+                                        <i class="material-icons">thumb_up</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <p class="category">Seguidores</p>
+                                        <!--<h3 class="title">49/50<small>GB</small></h3>-->
+                                        <h2 id="count-likes">0</h2><!--<h4>likes</h4>-->
+                                    </div> 
+                                </div>
                             <% } else { %>
-                                <h2 id="count-likes"></h2><h4></h4>
+                                <div class="card card-stats">
+                                    <div class="card-header" data-background-color="blue">
+                                        <i class="material-icons">thumb_up</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <p class="category">Seguidores</p>
+                                        <!--<h3 class="title">49/50<small>GB</small></h3>-->
+                                        <h2 id="count-likes"></h2><!--<h4>likes</h4>-->
+                                    </div> 
+                                </div>
+                                <!--<h2 id="count-likes"></h2><h4></h4>-->
                             <% } %>
                         </div>
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-3">
+                            <% if  (hasPage) { %>
+                                <div class="card card-stats">
+                                    <div class="card-header" data-background-color="red">
+                                        <i class="material-icons">rss_feed</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <p class="category">Publicaciones sobre corrupción</p>
+                                        <!--<h3 class="title">49/50<small>GB</small></h3>-->
+                                        <h2 id="count-corrupcion">0</h2>
+                                    </div> 
+                                    <div id="corrupcion-footer" class="card-footer">
+                                        <div class="stats">
+                                            <i class="material-icons text-danger">info</i>
+                                            <span id="describe-outlier-corrupcion">
+                                            <% if (sesgoLideresCorrupcion['medios'][pageId]['corrupcion']['outlier'] == "large") { %>
+                                                Esta persona publica sobre corrupción considerablemente más que el resto de líderes de opinión.
+                                            <% } else if (sesgoLideresCorrupcion['medios'][pageId]['corrupcion']['outlier'] == "small") {%>
+                                                Esta persona publica sobre corrupción considerablemente menos que el resto de líderes de opinión.
+                                            <% } %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } else { %>
+                                <div class="card card-stats">
+                                    <div class="card-header" data-background-color="red">
+                                        <i class="material-icons">rss_feed</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <p class="category">Publicaciones sobre corrupción</p>
+                                        <!--<h3 class="title">49/50<small>GB</small></h3>-->
+                                        <h2 id="count-corrupcion"></h2>
+                                    </div> 
+                                    <div class="card-footer">
+                                        <div class="stats">
+                                            <i class="material-icons text-danger">info</i>
+                                            <span id="describe-outlier-corrupcion"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                    </div>
+                    <div id="subtitle-word-cloud" class="row">
+                        <h3>Nube de palabras de publicaciones de este líder de opinión</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <% if (hasPage) { %>
+                                <img id="word-cloud" width="100%" src="/img/wordclouds/<%=year%>-<%=month%>-<%=pageId%>.png">
+                            <% } else { %>
+                                <img id="word-cloud" width="100%" src="">
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3>Tendencias</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="row">
                         <%- include('graphs/comments-sentiment', {
@@ -284,5 +403,12 @@
     pageId: pageId,
     numberLikes: numberLikes,
     lideres: lideres
+}) %>
+<%- include('scripts/count-corrupcion', {
+    hasPage: hasPage,
+    pageId: pageId,
+    numberLikes: numberLikes,
+    lideres: lideres,
+    sesgoLideresCorrupcion: sesgoLideresCorrupcion
 }) %>
 </html>

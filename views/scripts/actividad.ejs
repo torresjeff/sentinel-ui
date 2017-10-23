@@ -235,7 +235,6 @@
 
         $.get("/summary/activity/<%=entity%>", function (data) {
 	        summary = data;
-	        console.log("DATA IS",data);
 	        displaySummaryFor("<%=displayDefault%>");
 	    });
 
