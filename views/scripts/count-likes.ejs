@@ -58,6 +58,7 @@
 	        for (var i = 0; i < lideres.length; i++) {
 	        	if (lideres[i].id == entity) {
 	        		if (lideres[i]['page_id']) {
+	        			$("#count-likes").text("0");
 	        			getStats(lideres[i]['page_id']);
 	        			getReactions(lideres[i]['page_id']);
 	        		}
