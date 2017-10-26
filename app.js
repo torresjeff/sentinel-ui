@@ -402,10 +402,28 @@ app.get('/summary/descriptive/posts/:pageId/:entity/:specific', function (req, r
   var entity = req.params.entity;
   var specific = req.params.specific;
   descriptive.getAllPostCountsFor(pageId, entity, function (docs) {
-    console.log("postCountsResults", docs);
-    // Hacer summary
+    //console.log("postCountsResults", docs);
+    var labels = [];
+    var data = [];
+    for (var i = 0; i < docs.length; i++) {
+      for (var j = 0; j < docs[i][entity].length; j++) {
+        if (docs[i][entity][j].short_name == specific) {
+          //console.log("Found with same name", docs[i].month + "/" + docs[i].year);
+          //console.log(docs[i][entity][j].post_count);
+          labels.push(docs[i].month + "/" + docs[i].year);
+          data.push(docs[i][entity][j].post_count);
+          break;
+        }
+      }
+    }
 
-    return res.json(docs);
+    // TODO: que pasa si no tienen el mismo numero de summaries;
+    var response = {
+      labels: labels,
+      data: data
+    };
+    //console.log("final response = ", response);
+    return res.json(response);
   });
 });
 
