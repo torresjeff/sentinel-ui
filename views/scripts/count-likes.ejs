@@ -19,6 +19,7 @@
 	        if (!$("#stats-display").is(":visible")) {
 	        	$("#stats-display").toggle();
 	        	$("#no-facebook").toggle();
+	        	$("#row-reactions").toggle();
 	        }
 	        var counter = new CountUp(idCounter, 0, end, 0, 1.5, options);
 	        if (!counter.error) {
@@ -28,15 +29,29 @@
 	        }
 	    }
 
-	    if (hasPage) {
-	    	animateCount('count-likes', numberLikes);
-	    }
 		function getStats(pageId) {
 			$.get("/stats/" + pageId, function (data) {
 				animateCount('count-likes', data.numberLikes)
 			});
 		}
 
+		function getReactions(pageId) {
+			$.get("/summary/descriptive/reactions/" + pageId, function (data) {
+				if (data != {}) {
+					animateCount('count-like', data.like);
+					animateCount('count-angry', data.angry);
+					animateCount('count-haha', data.haha);
+					animateCount('count-sad', data.sad);
+					animateCount('count-love', data.love);
+					animateCount('count-wow', data.wow);
+				}
+			})
+		}
+
+	    if (hasPage) {
+	    	animateCount('count-likes', numberLikes);
+	    	getReactions(pageId);
+	    }
 		//animateCount('count-likes')
 		$(".dropdown-menu > li > a").on('click', {}, function (evt) {
 	        var entity = $(this).attr('id');
@@ -44,11 +59,13 @@
 	        	if (lideres[i].id == entity) {
 	        		if (lideres[i]['page_id']) {
 	        			getStats(lideres[i]['page_id']);
+	        			getReactions(lideres[i]['page_id']);
 	        		}
 	        		else {
 	        			if ($("#stats-display").is(":visible")) {
 				        	$("#stats-display").toggle();
 				        	$("#no-facebook").toggle();
+				        	$("#row-reactions").toggle();
 				        }
 	        		}
 	        		break;

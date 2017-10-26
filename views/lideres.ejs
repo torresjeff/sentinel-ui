@@ -218,6 +218,217 @@
                         <div class="col-md-3">
                         </div>
                     </div>
+                    <% if  (hasPage) { %>
+                    <div id="row-reactions" class="row">
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Like-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me gusta</h3></p>
+                                    <h3 id="count-like">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me gusta" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Angry-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me enfada</h3></p>
+                                    <h3 id="count-angry">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me enfada" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Haha-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me divierte</h3></p>
+                                    <h3 id="count-haha">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me divierte" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Sad-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me entristece</h3></p>
+                                    <h3 id="count-sad">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me entristece" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Love-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me encanta</h3></p>
+                                    <h3 id="count-love">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me encanta" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Wow-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me asombra</h3></p>
+                                    <h3 id="count-wow">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me asombra" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else { %>
+                    <div id="row-reactions" class="row" style="display: none;">
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Like-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me gusta</h3></p>
+                                    <h3 id="count-like">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me gusta" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Angry-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me enfada</h3></p>
+                                    <h3 id="count-angry">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me enfada" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Haha-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me divierte</h3></p>
+                                    <h3 id="count-haha">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me divierte" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Sad-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me entristece</h3></p>
+                                    <h3 id="count-sad">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me entristece" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Love-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me encanta</h3></p>
+                                    <h3 id="count-love">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me encanta" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card card-stats">
+                                <div class="card-header" style="background-color: white">
+                                    <img src="/img/reactions/Wow-500px.gif">
+                                </div>
+                                <div class="card-content">
+                                    <p class="category"><h3>Me asombra</h3></p>
+                                    <h3 id="count-wow">0</h3>
+                                </div> 
+                                <div class="card-footer">
+                                    <div class="stats">
+                                        <i class="material-icons">info</i>
+                                        Número total de "Me asombra" que ha recibido esta persona en todas las publicaciones que ha hecho en Facebook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
                     <div id="subtitle-word-cloud" class="row">
                         <h3>Nube de palabras de publicaciones de este líder de opinión</h3>
                         <table class="table">

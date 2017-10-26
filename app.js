@@ -385,7 +385,7 @@ app.get('/stats/:pageId', function (req, res) {
    
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
-      console.log("ended request", JSON.parse(data)['fan_count']);
+      console.log("ended request", data);
       var requestRes = JSON.parse(data);
       return res.json({
         numberLikes: requestRes.fan_count
@@ -424,6 +424,23 @@ app.get('/summary/descriptive/posts/:pageId/:entity/:specific', function (req, r
     };
     //console.log("final response = ", response);
     return res.json(response);
+  });
+});
+
+app.get('/summary/descriptive/reactions/:pageId', function (req, res) {
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() + 1;
+  var pageId = req.params.pageId;
+
+  descriptive.getReactionsFor(pageId, year, month, function (docs) {
+    if (docs == null) {
+      return res.json({});
+    }
+    if (docs.length > 0) {
+      return res.json(docs[0].reactions);
+    }
+    return res.json({});
   });
 });
 
