@@ -122,7 +122,7 @@ app.get('/lideres', function (req, res) {
 
   sesgo.getSesgoFor(month, year, "lideres-corrupcion", function (sesgoCor) {
     if (!sesgoCor) {
-      return res.render('lideres.ejs', { casos: [], lideres: [], summary: [] });
+      return res.render('lideres.ejs', { casos: [], lideres: [], summary: [], hasPage: false });
     }
 
     sesgoLideresCorrupcion = sesgoCor;
@@ -441,6 +441,22 @@ app.get('/summary/descriptive/reactions/:pageId', function (req, res) {
       return res.json(docs[0].reactions);
     }
     return res.json({});
+  });
+});
+
+app.get('/summary/descriptive/commentscorruption/:entity/:specific', function (req, res) {
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() + 1;
+  var entity = req.params.entity;
+  var specific = req.params.specific;
+  descriptive.getCommentCountCorruption(entity, month, year, function (docs) {
+    if (!docs) {
+      return res.json({});
+    }
+    console.log(docs[0][entity]);
+    return res.json(docs[0][entity][specific]);
+    
   });
 });
 

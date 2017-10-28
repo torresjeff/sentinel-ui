@@ -12,11 +12,11 @@
             %>
         ];
 
+        var liderDefault = "<%= liderDefault %>";
+
         var config = {
             type: 'line',
             data: {
-                // TODO: poner años programatically
-                /*labels: ["Enero/16", "Febrero/16", "Marzo/16", "Abril/16", "Mayo/16", "Junio/16", "Julio/16", "Agosto/16", "Septiembre/16", "Octubre/16", "Noviembre/16", "Diciembre/16", "Enero/17", "Febrero/17", "Marzo/17", "Abril/17", "Mayo/17", "Junio/17", "Julio/17", "Agosto/17", "Septiembre/17", "Octubre/17", "Noviembre/17", "Diciembre/17"],*/
                 labels: monthlyLabels,
                 datasets: [{
                     label: "Sentimientos negativos",
@@ -109,6 +109,37 @@
         var ctx = document.getElementById("comments-sentiment").getContext("2d");
         window.sentiments = new Chart(ctx, config);
 
+        function animateCount(idCounter, end) {
+            var options = {
+              useEasing: true, 
+              useGrouping: true, 
+              separator: '.', 
+              decimal: ',', 
+            };
+            var counter = new CountUp(idCounter, 0, end, 0, 1.5, options);
+            if (!counter.error) {
+                counter.start();
+            } else {
+                console.error(counter.error);
+            }
+        }
+
+        function getCommentsLiderCorrupcion(id) {
+            $.get("/summary/descriptive/commentscorruption/lideres/" + id, function (data) {
+                if (data != {}) {
+                    console.log("comment corruption", data);
+                    animateCount('comment-corruption-count', data['comments']);
+                    //$("").html(data['comments']);
+                }
+            });
+        }
+
+        function initialize() {
+            getCommentsLiderCorrupcion(liderDefault);
+        }
+
+        initialize();
+
         $(".dropdown-menu > li > a").on('click', {}, function (evt) {
             var entity = $(this).attr('id');
             var seleccionado = $(this).text();
@@ -153,7 +184,11 @@
                     }
                 }
                 $("#top-comments").html(replaceStr);
-            });
+            }); // $.get
+
+            getCommentsLiderCorrupcion(entity);
+
         });
+
 	}); // document.ready
 </script>

@@ -38,19 +38,22 @@
 	    }
 
 		$(".dropdown-menu > li > a").on('click', {}, function (evt) {
-			console.log("clicked corrupcion");
 	        var entity = $(this).attr('id');
+	        var found = false;
 	        for (var i = 0; i < lideres.length; i++) {
 	        	if (lideres[i].id == entity) {
 	        		if (lideres[i]['page_id']) {
-	        			console.log("animateCount")
+	        			found = true;
+	        			console.log("animateCount");
 	        			var pageId = lideres[i]['page_id'];
 	        			animateCount('count-corrupcion', sesgoLideresCorrupcion['medios'][lideres[i]['page_id']]['corrupcion']['posts']);
 	        			var outlier = sesgoLideresCorrupcion['medios'][lideres[i]['page_id']]['corrupcion']['outlier'];
+	        			console.log("clicked, outlier = ", outlier);
 	        			if (outlier == "large") {
 	        				if (!$("#corrupcion-footer").is(":visible")) {
 	        					$("#corrupcion-footer").toggle();
 	        				}
+
 	        				$("#describe-outlier-corrupcion").html("Esta persona publica sobre corrupción considerablemente más que el resto de líderes de opinión.");
 	        			}
 	        			else if (outlier == "small") {
@@ -70,14 +73,14 @@
 				        	$("#subtitle-word-cloud").toggle();
 				        }
 	        		}
-	        		else {
-		        		if ($("#subtitle-word-cloud").is(":visible")) {
-		        			$("#word-cloud").attr("src", "");
-		        			$("#subtitle-word-cloud").toggle();
-				        }
-	        		}
 	        		break;
 	        	}
+	        } // for i
+	        if (!found) {
+        		if ($("#subtitle-word-cloud").is(":visible")) {
+        			$("#word-cloud").attr("src", "");
+        			$("#subtitle-word-cloud").toggle();
+		        }
 	        }
 	    });
 	});

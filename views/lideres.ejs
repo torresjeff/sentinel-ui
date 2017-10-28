@@ -170,8 +170,7 @@
                                 <!--<h2 id="count-likes"></h2><h4></h4>-->
                             <% } %>
                         </div>
-                        <div class="col-md-3">
-                        </div>
+                        <div class="col-md-1"></div>
                         <div class="col-md-3">
                             <% if  (hasPage) { %>
                                 <div class="card card-stats">
@@ -215,7 +214,37 @@
                                 </div>
                             <% } %>
                         </div>
+                        <div class="col-md-1"></div>
                         <div class="col-md-3">
+                            <% if  (hasPage) { %>
+                                <div class="card card-stats">
+                                    <div class="card-header" data-background-color="orange">
+                                        <i class="material-icons">chat</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <p class="category">Cantidad de comentarios que mencionan a esta persona en noticias de corrupción</p>
+                                        <!--<h3 class="title">49/50<small>GB</small></h3>-->
+                                        <h2 id="comment-corruption-count">0</h2>
+                                    </div> 
+                                </div>
+                            <% } else { %>
+                                <div class="card card-stats">
+                                    <div class="card-header" data-background-color="orange">
+                                        <i class="material-icons">chat</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <p class="category">Cantidad de comentarios que mencionan a esta persona en noticias de corrupción</p>
+                                        <!--<h3 class="title">49/50<small>GB</small></h3>-->
+                                        <h2 id="comment-corruption-count"></h2>
+                                    </div> 
+                                    <div class="card-footer">
+                                        <div class="stats">
+                                            <i class="material-icons text-danger">info</i>
+                                            <span id="describe-outlier-corrupcion"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
                         </div>
                     </div>
                     <% if  (hasPage) { %>
@@ -482,7 +511,7 @@
                         }) %>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header" data-background-color="orange">
 
@@ -511,6 +540,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -597,7 +627,8 @@
 <%- include('scripts/dropdown.ejs', {
 }) %>
 <%- include('scripts/comments-sentiment.ejs', {
-    summary: summary
+    summary: summary,
+    liderDefault: lideres[0].id
 }) %>
 <%- include('scripts/actividad', {
     casos: casos,
