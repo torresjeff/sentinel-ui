@@ -1,5 +1,6 @@
 <script>
 	$(document).ready(function () {
+        var entityType = "<%= entity %>";
 		var monthlyLabels = [
             <% for (var i = 0; i < summary.length; i++) {
                 if (i != summary.length -1) { %>
@@ -140,12 +141,53 @@
 
         initialize();
 
+        $.get("/summary/comments/" + entityType + "/" + liderDefault, function (data) {
+            // Negative
+            var negative = []
+            for (var i = 0; i < data.length; i++) {
+                negative.push(data[i].negative);
+            }
+            config.data.datasets[0].data = negative;
+            // Positive
+            var positive = []
+            for (var i = 0; i < data.length; i++) {
+                positive.push(data[i].positive);
+            }
+            config.data.datasets[1].data = positive;
+            // Neutral
+            var neutral = []
+            for (var i = 0; i < data.length; i++) {
+                neutral.push(data[i].neutral);
+            }
+            config.data.datasets[2].data = neutral;
+            
+            config.data.labels = [];
+            for (var i = 0; i < data.length; i++) {
+                config.data.labels.push(data[i].month+ "/" + data[i].year)
+            }
+
+            window.sentiments.update();
+
+            var replaceStr = '';
+            if (data.length > 0) {
+                console.log("data.length > 0");
+                for (var i = 0; i < data[data.length - 1].top_comments.length; i++) {
+                    replaceStr += "<tr>";
+                    replaceStr += "<td>" + (i+1) + "</td>";
+                    replaceStr += "<td>" + data[data.length - 1].top_comments[i] + "</td>";
+                    replaceStr += "<td>" + data[data.length - 1].like_counts[i] + "</td>";
+                    replaceStr += "</tr>";
+                }
+            }
+            $("#top-comments").html(replaceStr);
+        });
+
         $(".dropdown-menu > li > a").on('click', {}, function (evt) {
             var entity = $(this).attr('id');
             var seleccionado = $(this).text();
 	    	$("#comment-table-entity").html(seleccionado);
 
-            $.get("/summary/comments/" + entity, function (data) {
+            $.get("/summary/comments/" + entityType + "/" + entity, function (data) {
                 // Negative
                 var negative = []
                 for (var i = 0; i < data.length; i++) {

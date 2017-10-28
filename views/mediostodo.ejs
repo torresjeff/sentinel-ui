@@ -51,8 +51,14 @@
                     </li>
                     <li>
                         <a href="/lideres">
-                            <i class="material-icons">group</i>
+                            <i class="material-icons">person</i>
                             <p>Líderes de opinión</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/partidos">
+                            <i class="material-icons">group</i>
+                            <p>Partidos políticos</p>
                         </a>
                     </li>
                     <li>
@@ -93,7 +99,7 @@
                             <span class="icon-bar"></span>
                         </button>
                         <!-- TODO: cambiar titulo -->
-                        <a class="navbar-brand" href="#"> Material Dashboard </a>
+                        <a class="navbar-brand" href="#"> Sentinel </a>
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
@@ -167,6 +173,14 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre corrupción: <span id="outliers-large-corrupcion"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre corrupción: <span id="outliers-small-corrupcion"></span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <!-- TODO: template titulos, etc. -->
                         <h3>Casos de corrupción</h3>
                         <table class="table">
@@ -196,6 +210,14 @@
 
                         <div class="col-lg-12">
                             <canvas id="casos-corrupcion" width="100%" height="500"></canvas>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre este caso de corrupción: <span id="outliers-large-casos"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre este caso de corrupción: <span id="outliers-small-casos"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -231,6 +253,22 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre este líder de opinón: <span id="outliers-large-lideres"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre corrupción de este líder de opinón: <span id="outliers-large-lideres-corrupcion"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre este líder de opinón: <span id="outliers-small-lideres"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre corrupción de este líder de opinón: <span id="outliers-small-lideres-corrupcion"></span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <!-- TODO: template titulos, etc. -->
                         <h3>Partidos políticos</h3>
                         <table class="table">
@@ -260,6 +298,22 @@
 
                         <div class="col-lg-12">
                             <canvas id="partidos-politicos" width="100%" height="500"></canvas>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre este partido político: <span id="outliers-large-partidos"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre corrupción en este partido político: <span id="outliers-large-partidos-corrupcion"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre este partido político: <span id="outliers-small-partidos"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre corrupción en este partido político: <span id="outliers-small-partidos-corrupcion"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -295,13 +349,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre esta institución: <span id="outliers-large-instituciones"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>más</b> sobre corrupción en esta institución: <span id="outliers-large-instituciones-corrupcion"></span>
+                        </div>
                     </div>
                     <div class="row">
-                        
-                    </div>
-                    <div class="row">
-                        
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre esta institución: <span id="outliers-small-instituciones"></span>
+                        </div>
+                        <div class="col-lg-6">
+                            Medios que publican considerablemente <b>menos</b> sobre corrupción en esta institución: <span id="outliers-small-instituciones-corrupcion"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -309,26 +370,6 @@
                 <div class="container-fluid">
                     <nav class="pull-left">
                         <ul>
-                            <li>
-                                <a href="#">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Company
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Portfolio
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Blog
-                                </a>
-                            </li>
                         </ul>
                     </nav>
                     <p class="copyright pull-right">

@@ -111,7 +111,16 @@ app.get('/', function (req, res) {
 });
 
 app.get('/descubre', function (req, res) {
-  return res.render('descubre.ejs', { message: 'Hello, world' });
+  var fechas = [];
+  assocs.getAllAssocsFor('posts', function (docs) {
+    for (var i = 0; i < docs.length; i++) {
+      fechas.push(docs[i].month + "/" + docs[i].year);
+    }
+    console.log(fechas);
+    return res.render('descubre.ejs', {
+      fechas: fechas
+    });
+  });
 });
 
 app.get('/lideres', function (req, res) {
@@ -198,8 +207,51 @@ app.get('/lideres', function (req, res) {
 
 });
 
+app.get('/partidos', function (req, res) {
+  descriptive.getAllActivityCounts('activity_count', 'partidos', function (partidos) {
+    if (!partidos) {
+      return res.render('partidos.ejs', { casos: [] });
+    }
+    console.log("partidos", partidos);
+    if (partidos.length > 0) {
+      comments.getSentimentForLider(lideres[0].id, function (sentiments) {
+        return res.render('partidos.ejs', {
+          casos: partidos,
+          summary: sentiments
+        });
+      });
+    }
+    else {
+      return res.render('partidos.ejs', {
+        error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.",
+        casos: [],
+        summary: []
+      })
+    }
+  });
+});
+
 app.get('/instituciones', function (req, res) {
-  return res.render('instituciones.ejs');
+  descriptive.getAllActivityCounts('activity_count', 'instituciones', function (instituciones) {
+    if (!instituciones) {
+      return res.render('instituciones.ejs', { casos: [] });
+    }
+    console.log("instituciones", instituciones);
+    if (instituciones.length > 0) {
+      comments.getSentimentForInstitucion(instituciones[0].id, function (sentiments) {
+        return res.render('instituciones.ejs', {
+          casos: instituciones,
+          summary: sentiments
+        });
+      });
+    }
+    else {
+      return res.render('instituciones.ejs', {
+        error: "Ocurrió un error al cargar los datos. Por favor, intente nuevamente.",
+        casos: []
+      })
+    }
+  });
 });
 
 app.get('/casos', function (req, res) {
@@ -346,15 +398,36 @@ app.get('/summary/sesgo/:year/:month/:entity', function (req, res) {
 
 });
 
-app.get('/summary/comments/:entity', function (req, res) {
+app.get('/summary/comments/:entityType/:entity', function (req, res) {
+  var entityType = req.params.entityType;
   var entity = req.params.entity;
-  comments.getSentimentForLider(entity, function (summary) {
+  if (entityType == "lideres") {
+    comments.getSentimentForLider(entity, function (summary) {
       // TODO: check if summary not null
       if (!summary) {
         return res.json({"error": "No summary found."});
       }
       return res.json(summary);
     });
+  }
+  else if (entityType == "partidos") {
+    comments.getSentimentForPartido(entity, function (summary) {
+      // TODO: check if summary not null
+      if (!summary) {
+        return res.json({"error": "No summary found."});
+      }
+      return res.json(summary);
+    });
+  }
+  else if (entityType == "instituciones") {
+    comments.getSentimentForInstitucion(entity, function (summary) {
+      // TODO: check if summary not null
+      if (!summary) {
+        return res.json({"error": "No summary found."});
+      }
+      return res.json(summary);
+    });
+  }
 });
 
 app.get('/summary/assocs/:year/:month/:type', function (req, res) {

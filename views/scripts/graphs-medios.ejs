@@ -4,6 +4,15 @@
         var year = today.getFullYear();
         var month = today.getMonth() + 1;
 
+        var sesgoCorrupcion = <%- JSON.stringify(sesgoCorrupcion) %>;
+        var sesgoCasos = <%- JSON.stringify(sesgoCasos) %>;
+        var sesgoLideres = <%- JSON.stringify(sesgoLideres) %>;
+        var sesgoPartidos = <%- JSON.stringify(sesgoPartidos) %>;
+        var sesgoInstituciones = <%- JSON.stringify(sesgoInstituciones) %>;
+        var sesgoCorrupcionLideres = <%- JSON.stringify(sesgoCorrupcionLideres) %>;
+        var sesgoCorrupcionPartidos = <%- JSON.stringify(sesgoCorrupcionPartidos) %>;
+        var sesgoCorrupcionInstituciones = <%- JSON.stringify(sesgoCorrupcionInstituciones) %>;
+
         var medioLeft = "<%= medios[0].id %>";
         var medioRight = "<%= medios[1].id %>";
         var currentCase = "odebrecht";

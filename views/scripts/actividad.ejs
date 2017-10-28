@@ -60,13 +60,26 @@
 
         var labelPublicaciones = "";
         var labelComentarios = "";
+        var labelReacciones= "";
         if (entity == "lideres") {
         	labelPublicaciones = "Cantidad de publicaciones sobre el líder";
         	labelComentarios = "Cantidad de comentarios sobre el líder";
+        	labelReacciones = 'Reacciones en noticias sobre este líder de opinión';
+        }
+        else if (entity == "partidos") {
+        	labelPublicaciones = "Cantidad de publicaciones sobre el partido político";
+        	labelComentarios = "Cantidad de comentarios sobre el partido político";
+        	labelReacciones = 'Reacciones en noticias sobre este partido político';
         }
         else if (entity == "casos") {
         	labelPublicaciones = "Cantidad de publicaciones sobre el caso";
         	labelComentarios = "Cantidad de comentarios sobre el caso";
+        	labelReacciones = 'Reacciones en noticias sobre este caso de corrupción';
+        }
+        else if (entity == "instituciones") {
+        	labelPublicaciones = "Cantidad de publicaciones sobre la institución";
+        	labelComentarios = "Cantidad de comentarios sobre la institución";
+        	labelReacciones = 'Reacciones en noticias sobre esta institución';
         }
 
 
@@ -198,7 +211,7 @@
 	            maintainAspectRatio: false,
 	            title:{
 	                display:true,
-	                text:'Reacciones en noticias sobre este líder de opinión'
+	                text:labelReacciones
 	            },
 	            tooltips: {
 	                mode: 'index',

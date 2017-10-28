@@ -41,6 +41,58 @@
         	return result;
         }
 
+        function getOutliersFor(mediosId, aspect, sesgo) {
+        	var result = [];
+        	for (var i = 0; i < mediosId.length; i++) {
+        		result.push({medio: mediosId[i], medioIndex: i, outlier: sesgo['medios'][mediosId[i]][aspect]["outlier"]});
+        	}
+        	return result;
+        }
+
+        var outliersCorrupcion = getOutliersFor(mediosId, "corrupcion", sesgoCorrupcion);
+        var outliersCasos = getOutliersFor(mediosId, currentCase, sesgoCasos);
+        var outliersLideres = getOutliersFor(mediosId, currentLeader, sesgoLideres);
+        var outliersPartidos = getOutliersFor(mediosId, currentPartido, sesgoPartidos);
+        var outliersInstituciones = getOutliersFor(mediosId, currentInstitucion, sesgoInstituciones);
+        var outliersCorrupcionLideres = getOutliersFor(mediosId, currentLeader, sesgoCorrupcionLideres);
+        var outliersCorrupcionPartidos = getOutliersFor(mediosId, currentPartido, sesgoCorrupcionPartidos);
+        var outliersCorrupcionInstituciones = getOutliersFor(mediosId, currentInstitucion, sesgoCorrupcionInstituciones);
+
+        console.log("outliersPartidos =", outliersPartidos);
+
+        function displayOutliers(idElement, typeOutlier, outliers) {
+        	html = "<ul>";
+        	for (var i = 0; i < outliers.length; i++) {
+        		if (outliers[i].outlier == typeOutlier) {
+        			html += "<li>" + mediosLabels[i] + "</li>";
+        		}
+        			
+        	}
+        	html += "</ul>";
+        	$("#" + idElement).html(html);
+        }
+
+        displayOutliers("outliers-large-corrupcion", "large", outliersCorrupcion);
+        displayOutliers("outliers-small-corrupcion", "small", outliersCorrupcion);
+
+        displayOutliers("outliers-large-casos", "large", outliersCasos);
+        displayOutliers("outliers-small-casos", "small", outliersCasos);
+
+        displayOutliers("outliers-large-lideres", "large", outliersLideres);
+        displayOutliers("outliers-small-lideres", "small", outliersLideres);
+        displayOutliers("outliers-large-lideres-corrupcion", "large", outliersCorrupcionLideres);
+        displayOutliers("outliers-small-lideres-corrupcion", "small", outliersCorrupcionLideres);
+
+        displayOutliers("outliers-large-partidos", "large", outliersPartidos);
+        displayOutliers("outliers-small-partidos", "small", outliersPartidos);
+        displayOutliers("outliers-large-partidos-corrupcion", "large", outliersCorrupcionPartidos);
+        displayOutliers("outliers-small-partidos-corrupcion", "small", outliersCorrupcionPartidos);
+
+        displayOutliers("outliers-large-instituciones", "large", outliersInstituciones);
+        displayOutliers("outliers-small-instituciones", "small", outliersInstituciones);
+        displayOutliers("outliers-large-instituciones-corrupcion", "large", outliersCorrupcionInstituciones);
+        displayOutliers("outliers-small-instituciones-corrupcion", "small", outliersCorrupcionInstituciones);
+
         var color = Chart.helpers.color;
         var dataCorrupcion = getDataFor(mediosId, "corrupcion", sesgoCorrupcion);
         var dataCasos = getDataFor(mediosId, currentCase, sesgoCasos);
@@ -160,7 +212,14 @@
 	    function updateStatsManager(entity, dropdown) {
     		if (dropdown == "casos") {
     			currentCase = entity;
+    			outliersCasos = getOutliersFor(mediosId, currentCase, sesgoCasos);
+    			displayOutliers("outliers-large-casos", "large", outliersCasos);
+		        displayOutliers("outliers-small-casos", "small", outliersCasos);
+
     			dataCasos = getDataFor(mediosId, currentCase, sesgoCasos);
+    			displayOutliers("outliers-large-casos", "large", outliersCasos);
+        		displayOutliers("outliers-small-casos", "small", outliersCasos);
+
     			updateGraph('casos-corrupcion', mediosLabels, [{
 	                label: 'Cantidad de publicaciones sobre el caso de corrupción',
 	                backgroundColor: color(window.chartColors['orange']).alpha(0.5).rgbString(),
@@ -171,6 +230,13 @@
     		}
     		else if (dropdown == "lideres") {
     			currentLeader = entity;
+		        outliersLideres = getOutliersFor(mediosId, currentLeader, sesgoLideres);
+		        outliersCorrupcionLideres = getOutliersFor(mediosId, currentLeader, sesgoCorrupcionLideres);
+		        displayOutliers("outliers-large-lideres", "large", outliersLideres);
+		        displayOutliers("outliers-small-lideres", "small", outliersLideres);
+		        displayOutliers("outliers-large-lideres-corrupcion", "large", outliersCorrupcionLideres);
+		        displayOutliers("outliers-small-lideres-corrupcion", "small", outliersCorrupcionLideres);
+
 	        	dataLideres = getDataFor(mediosId, currentLeader, sesgoLideres);
 	        	dataCorrupcionLideres = getDataFor(mediosId, currentLeader, sesgoCorrupcionLideres);
     			updateGraph('lideres-opinion', mediosLabels, [{
@@ -189,6 +255,14 @@
     		}
     		else if (dropdown == "partidos") {
     			currentPartido = entity;
+		        outliersPartidos = getOutliersFor(mediosId, currentPartido, sesgoPartidos);
+		        outliersCorrupcionPartidos = getOutliersFor(mediosId, currentPartido, sesgoCorrupcionPartidos);
+		        displayOutliers("outliers-large-partidos", "large", outliersPartidos);
+		        displayOutliers("outliers-small-partidos", "small", outliersPartidos);
+		        displayOutliers("outliers-large-partidos-corrupcion", "large", outliersCorrupcionPartidos);
+		        displayOutliers("outliers-small-partidos-corrupcion", "small", outliersCorrupcionPartidos);
+
+
 		        dataPartidos = getDataFor(mediosId, currentPartido, sesgoPartidos);
 		        dataCorrupcionPartidos = getDataFor(mediosId, currentPartido, sesgoCorrupcionPartidos);
     			updateGraph('partidos-politicos', mediosLabels, [{
@@ -207,6 +281,13 @@
     		}
     		else if (dropdown == "instituciones") {
 	    		currentInstitucion = entity;
+		        outliersInstituciones = getOutliersFor(mediosId, currentInstitucion, sesgoInstituciones);
+		        outliersCorrupcionInstituciones = getOutliersFor(mediosId, currentInstitucion, sesgoCorrupcionInstituciones);
+		        displayOutliers("outliers-large-instituciones", "large", outliersInstituciones);
+		        displayOutliers("outliers-small-instituciones", "small", outliersInstituciones);
+		        displayOutliers("outliers-large-instituciones-corrupcion", "large", outliersCorrupcionInstituciones);
+		        displayOutliers("outliers-small-instituciones-corrupcion", "small", outliersCorrupcionInstituciones);
+		        
 		        dataInstituciones = getDataFor(mediosId, currentInstitucion, sesgoInstituciones);
 		        dataCorrupcionInstituciones = getDataFor(mediosId, currentInstitucion, sesgoCorrupcionInstituciones);
 	    		updateGraph('publicaciones-instituciones', mediosLabels, [{
