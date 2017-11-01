@@ -126,7 +126,7 @@ app.get('/descubre', function (req, res) {
 app.get('/lideres', function (req, res) {
   var today = new Date();
   var year = today.getFullYear();
-  var month = today.getMonth() + 1;
+  var month = 10;
   var sesgoLideresCorrupcion;
 
   sesgo.getSesgoFor(month, year, "lideres-corrupcion", function (sesgoCor) {
@@ -277,7 +277,7 @@ app.get('/casos', function (req, res) {
 app.get('/medios', function (req, res) {
   var today = new Date();
   var year = today.getFullYear();
-  var month = today.getMonth() + 1;
+  var month = 10;
   
   var sesgoCorrupcion;
   var sesgoCasos;
@@ -333,7 +333,7 @@ app.get('/medios', function (req, res) {
 app.get('/mediostodo', function (req, res) {
   var today = new Date();
   var year = today.getFullYear();
-  var month = today.getMonth() + 1;
+  var month = 10;
   
   var sesgoCorrupcion;
   var sesgoCasos;
@@ -504,7 +504,7 @@ app.get('/summary/descriptive/posts/:pageId/:entity/:specific', function (req, r
 app.get('/summary/descriptive/reactions/:pageId', function (req, res) {
   var today = new Date();
   var year = today.getFullYear();
-  var month = today.getMonth() + 1;
+  var month = 10;
   var pageId = req.params.pageId;
 
   descriptive.getReactionsFor(pageId, year, month, function (docs) {
@@ -521,7 +521,7 @@ app.get('/summary/descriptive/reactions/:pageId', function (req, res) {
 app.get('/summary/descriptive/commentscorruption/:entity/:specific', function (req, res) {
   var today = new Date();
   var year = today.getFullYear();
-  var month = today.getMonth() + 1;
+  var month = 10;
   var entity = req.params.entity;
   var specific = req.params.specific;
   descriptive.getCommentCountCorruption(entity, month, year, function (docs) {
