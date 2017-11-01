@@ -29,10 +29,14 @@
 	    }
 
 	    function updateImage(idImage, pageId) {
-	    	console.log("updateImage called")
+	    	if (!$("#word-cloud").is(":visible")) {
+	        	$("#word-cloud").toggle();
+	        }
+	    	console.log("updateImage called");
 		    var today = new Date();
 		    var year = today.getFullYear();
-		    var month = today.getMonth() + 1;
+		    // TODO: cambiar a today.getMonth() + 1
+		    var month = 10;
 	    	var img = "/img/wordclouds/" + year + "-" + month + "-" + pageId + ".png";
 	    	$(idImage).attr("src", img);
 	    }
@@ -68,6 +72,7 @@
 	        					$("#describe-outlier-corrupcion").html("");
 	        				}
 	        			}
+
 	        			updateImage('#word-cloud', pageId);
 	        			if (!$("#subtitle-word-cloud").is(":visible")) {
 				        	$("#subtitle-word-cloud").toggle();
@@ -78,7 +83,8 @@
 	        } // for i
 	        if (!found) {
         		if ($("#subtitle-word-cloud").is(":visible")) {
-        			$("#word-cloud").attr("src", "");
+        			//$("#word-cloud").attr("src", "");
+        			$("#word-cloud").toggle();
         			$("#subtitle-word-cloud").toggle();
         			$("#describe-outlier-corrupcion").html("");
         			$("#corrupcion-footer").toggle();
