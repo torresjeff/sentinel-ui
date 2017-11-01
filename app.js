@@ -136,7 +136,7 @@ app.get('/lideres', function (req, res) {
 
     sesgoLideresCorrupcion = sesgoCor;
     if (lideres[0]['page_id']) {
-      console.log("lideres[0] has page_id");
+      /*console.log("lideres[0] has page_id");
       var requestPage = 'https://graph.facebook.com/v2.9/' + lideres[0]['page_id'] + '?fields=fan_count&access_token=' + facebookToken;
       console.log("making request to", requestPage);
       https.get(requestPage, (resp) => {
@@ -149,34 +149,35 @@ app.get('/lideres', function (req, res) {
        
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
-          console.log("ended request", JSON.parse(data)['fan_count']);
-          var requestRes = JSON.parse(data);
-          comments.getSentimentForLider(lideres[0].id, function (sentiments) {
-            //console.log("lideres", lideres)
-            //console.log(sentiments);
-            descriptive.getAllActivityCounts('activity_count', 'lideres', function (casos) {
-              if (!casos || !lideres) {
-                return res.render('lideres.ejs', { casos: [], lideres: [], summary: [] });
-              }
-              else {
-                return res.render('lideres.ejs', {
-                  lideres: lideres,
-                  summary: sentiments,
-                  casos: casos,
-                  sesgoLideresCorrupcion: sesgoLideresCorrupcion,
-                  hasPage: true,
-                  numberLikes: requestRes['fan_count'],
-                  pageId: lideres[0]['page_id'],
-                  year: year,
-                  month: month
-                });
-              }
-            });
-          });
+          
         });
        
       }).on("error", (err) => {
         console.log("Error: " + err.message);
+      });*/
+      //console.log("ended request", JSON.parse(data)['fan_count']);
+      //var requestRes = JSON.parse(data);
+      comments.getSentimentForLider(lideres[0].id, function (sentiments) {
+        //console.log("lideres", lideres)
+        //console.log(sentiments);
+        descriptive.getAllActivityCounts('activity_count', 'lideres', function (casos) {
+          if (!casos || !lideres) {
+            return res.render('lideres.ejs', { casos: [], lideres: [], summary: [] });
+          }
+          else {
+            return res.render('lideres.ejs', {
+              lideres: lideres,
+              summary: sentiments,
+              casos: casos,
+              sesgoLideresCorrupcion: sesgoLideresCorrupcion,
+              hasPage: true,
+              numberLikes: 0,
+              pageId: lideres[0]['page_id'],
+              year: year,
+              month: month
+            });
+          }
+        });
       });
     }
     else {
@@ -527,7 +528,7 @@ app.get('/summary/descriptive/commentscorruption/:entity/:specific', function (r
     if (!docs) {
       return res.json({});
     }
-    console.log(docs[0][entity]);
+    //console.log(docs[0][entity]);
     return res.json(docs[0][entity][specific]);
     
   });
