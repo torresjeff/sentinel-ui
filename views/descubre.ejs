@@ -219,11 +219,13 @@
     $(document).ready(function() {
         var date = new Date();
         var type = "posts";
-        var year = date.getFullYear();
-        // TODO: cambiar a date.getMonth()
-        var month = 10;
-        //console.log("month", );
-        //console.log("year", );
+        var fechas = <%- JSON.stringify(fechas) %>;
+        //var year = date.getFullYear();
+        var initialDate = fechas[0].split("/");
+        var year = parseInt(initialDate[1]);
+        var month = parseInt(initialDate[0]);
+        console.log("month", month);
+        console.log("year", year);
         function getAssocs(type, year, month) {
             $.get("/summary/assocs/" + year + "/" + month + "/" + type, function (data) {
                 //console.log(data);
