@@ -107,7 +107,7 @@ app.listen('8080', '0.0.0.0', function() {
 });
 
 app.get('/', function (req, res) {
-  return res.redirect('/descubre')
+  return res.redirect('/lideres');
 });
 
 app.get('/descubre', function (req, res) {
