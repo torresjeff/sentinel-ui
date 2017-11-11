@@ -534,9 +534,3 @@ app.get('/summary/descriptive/commentscorruption/:entity/:specific', function (r
   });
 });
 
-/*
-app.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/home',
-  failureRedirect: '/',
-  failureFlash: true
-}));*/

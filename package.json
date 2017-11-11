@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
     "body-parser": "^1.17.1",
@@ -20,5 +21,10 @@
   "repository": {},
   "engines": {
     "node": "6.10.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "request": "^2.83.0"
   }
 }
