@@ -534,3 +534,28 @@ app.get('/summary/descriptive/commentscorruption/:entity/:specific', function (r
   });
 });
 
+app.get('/summary/descriptive/popular/:year/:month/:entity/:specific', function (req, res) {
+  var year = parseInt(req.params.year);
+  var month = parseInt(req.params.month);
+  var entity = req.params.entity;
+  var specific = req.params.specific;
+  descriptive.getPopularPostsAndCommentsForDate(entity, specific, month, year, function (docs) {
+    if (!docs || docs.length == 0) {
+      return res.json({});
+    }
+    console.log("docs", docs);
+    return res.json(docs[0]);
+  });
+});
+
+app.get('/summary/descriptive/popular/:entity/:specific', function (req, res) {
+  var entity = req.params.entity;
+  var specific = req.params.specific;
+  descriptive.getPopularPostsAndComments(entity, specific, function (docs) {
+    if (!docs || docs.length == 0) {
+      return res.json([]);
+    }
+    console.log("docs", docs);
+    return res.json(docs);
+  });
+});

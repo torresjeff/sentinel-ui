@@ -2,6 +2,8 @@
 	$(document).ready(function () {
 	    var summary = null;
 	    var entity = "<%=entity%>";
+        var currentEntity = "<%=displayDefault%>";
+        var popularPostsAndComments = [];
 
 		var monthlyLabels = [
 	        <% for (var i = 0; i < casos.length; i++) {
@@ -16,47 +18,6 @@
 	    ];
 
 		console.log(monthlyLabels);
-
-		function displaySummaryFor(caso) {
-            console.log("caso", caso)
-            var post_count = [];
-            var comment_count = [];
-            var angry = [];
-            var like = [];
-            var haha = [];
-            var sad = [];
-            var love = [];
-            var wow = [];
-
-            for (var i = 0; i < summary.length; i++) {
-                for (var j = 0; j < summary[i][entity].length; j++) {
-                    if (summary[i][entity][j].short_name == caso) {
-                        post_count.push(summary[i][entity][j].post_count);
-                        comment_count.push(summary[i][entity][j].comment_count);
-                        angry.push(summary[i][entity][j].angry);
-                        like.push(summary[i][entity][j].like);
-                        haha.push(summary[i][entity][j].haha);
-                        sad.push(summary[i][entity][j].sad);
-                        love.push(summary[i][entity][j].love);
-                        wow.push(summary[i][entity][j].wow);
-                        break;
-                    }
-                }
-            }
-
-            configActividad.data.datasets[0].data = post_count;
-            configActividad.data.datasets[1].data = comment_count;
-            configReactions.data.datasets[0].data = like;
-            configReactions.data.datasets[1].data = angry;
-            configReactions.data.datasets[2].data = haha;
-            configReactions.data.datasets[3].data = sad;
-            configReactions.data.datasets[4].data = love;
-            configReactions.data.datasets[5].data = wow;
-
-
-            window.activity.update();
-            window.reactions.update();
-        }
 
         var labelPublicaciones = "";
         var labelComentarios = "";
@@ -82,7 +43,11 @@
         	labelReacciones = 'Reacciones en noticias sobre esta institución';
         }
 
-
+        function getPopularPostsAndComments(entity, specific) {
+            $.get("/summary/descriptive/popular/" + entity + "/" + specific, function (data) {
+                popularPostsAndComments = data;
+            });
+        }
 
         var configActividad = {
             type: 'line',
@@ -118,6 +83,51 @@
                 tooltips: {
                     mode: 'index',
                     intersect: false,
+                    borderWidth: 100,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var tipoLabel = data.datasets[tooltipItem.datasetIndex].label;
+                            var outputLabel = [tipoLabel + ": " + tooltipItem.yLabel];
+                            var date = tooltipItem.xLabel.split("/");
+                            var month = date[0];
+                            var year = date[1];
+                            var publicacionPopular = "Publicación más popular este mes: ";
+                            var comentarioPopular = "Comentario más popular este mes: ";
+
+                            if (tipoLabel.indexOf("publicaciones") >= 0 && tooltipItem.yLabel > 0) {
+                                // Buscar publicacion mas popular para el mes
+                                for (var i = 0; i < popularPostsAndComments.length; i++) {
+                                    currentPost = popularPostsAndComments[i];
+                                    if (currentPost.year == parseInt(year) && currentPost.month == parseInt(month) && currentPost['most_popular_post'] != "") {
+                                        var cutPost = currentPost['most_popular_post'];
+                                        if (cutPost.length > 150) {
+                                            cutPost = cutPost.substr(0, 150) + "...";
+                                        }
+                                        outputLabel.push(publicacionPopular + cutPost);
+                                    }
+                                }
+                                return outputLabel;
+                            }
+                            else if (tipoLabel.indexOf("comentarios") >= 0 && tooltipItem.yLabel > 0) {
+                                for (var i = 0; i < popularPostsAndComments.length; i++) {
+                                    currentPost = popularPostsAndComments[i];
+                                    if (currentPost.year == parseInt(year) && currentPost.month == parseInt(month) && currentPost['most_popular_comment'] != "") {
+                                        var cutPost = currentPost['most_popular_comment'];
+                                        if (cutPost.length > 150) {
+                                            cutPost = cutPost.substr(0, 150) + "...";
+                                        }
+                                        outputLabel.push(comentarioPopular + cutPost);
+                                        //outputLabel.push(comentarioPopular + currentPost['most_popular_comment']);
+                                    }
+                                }
+                                return outputLabel;
+                            }
+                            else {
+                                return outputLabel;
+                            }
+                            
+                        }
+                    }
                 },
                 hover: {
                     mode: 'nearest',
@@ -243,14 +253,58 @@
 	    var reactionsCtx = document.getElementById("reactions").getContext("2d");
 	    window.reactions = new Chart(reactionsCtx, configReactions);
 
+        function displaySummaryFor(caso) {
+            console.log("caso", caso)
+            var post_count = [];
+            var comment_count = [];
+            var angry = [];
+            var like = [];
+            var haha = [];
+            var sad = [];
+            var love = [];
+            var wow = [];
+
+            for (var i = 0; i < summary.length; i++) {
+                for (var j = 0; j < summary[i][entity].length; j++) {
+                    if (summary[i][entity][j].short_name == caso) {
+                        post_count.push(summary[i][entity][j].post_count);
+                        comment_count.push(summary[i][entity][j].comment_count);
+                        angry.push(summary[i][entity][j].angry);
+                        like.push(summary[i][entity][j].like);
+                        haha.push(summary[i][entity][j].haha);
+                        sad.push(summary[i][entity][j].sad);
+                        love.push(summary[i][entity][j].love);
+                        wow.push(summary[i][entity][j].wow);
+                        break;
+                    }
+                }
+            }
+
+            configActividad.data.datasets[0].data = post_count;
+            configActividad.data.datasets[1].data = comment_count;
+            configReactions.data.datasets[0].data = like;
+            configReactions.data.datasets[1].data = angry;
+            configReactions.data.datasets[2].data = haha;
+            configReactions.data.datasets[3].data = sad;
+            configReactions.data.datasets[4].data = love;
+            configReactions.data.datasets[5].data = wow;
+
+
+            window.activity.update();
+            window.reactions.update();
+        }
+
         $.get("/summary/activity/<%=entity%>", function (data) {
 	        summary = data;
 	        displaySummaryFor("<%=displayDefault%>");
 	    });
 
+        getPopularPostsAndComments(entity, currentEntity);
+
 	    $(".dropdown-menu > li > a").on('click', {}, function (evt) {
-            var entity = $(this).attr('id');
-            displaySummaryFor(entity);
+            currentEntity = $(this).attr('id');
+            displaySummaryFor(currentEntity);
+            getPopularPostsAndComments(entity, currentEntity);
 	    });
 	});
 </script>
