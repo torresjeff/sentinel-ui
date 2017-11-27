@@ -385,6 +385,10 @@ app.get('/mediostodo', function (req, res) {
   }); // corrupcion
 });
 
+app.get('/legal', function (req, res) {
+  return res.render('legal.ejs');
+});
+
 //////////////////////////////////////////////////////
 //                      WS                          //
 //////////////////////////////////////////////////////
